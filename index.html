@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SoloMax Web - Your AI Growth Team</title>
+  <meta name="description" content="SoloMax Web - AI-powered growth content platform. SEO, Social Media, ASO, Cold Email, GEO - all in one place.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+
+    /* Hero chart animations */
+    @keyframes drawLine {
+      from { stroke-dashoffset: 500; }
+      to { stroke-dashoffset: 0; }
+    }
+    @keyframes fadeInArea {
+      from { opacity: 0; }
+      to { opacity: 0.15; }
+    }
+    @keyframes popDot {
+      0% { r: 0; opacity: 0; }
+      60% { r: 4.5; }
+      100% { r: 3; opacity: 1; }
+    }
+    @keyframes popLastDot {
+      0% { r: 0; opacity: 0; }
+      60% { r: 6; }
+      100% { r: 4; opacity: 1; }
+    }
+    @keyframes growBar {
+      from { transform: scaleY(0); }
+      to { transform: scaleY(1); }
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+      50% { box-shadow: 0 0 12px 4px rgba(37, 99, 235, 0.12); }
+    }
+    @keyframes countPulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
+
+    .hero-chart-container { animation: slideUp 0.6s ease-out both; }
+
+    .kpi-card {
+      opacity: 0;
+      animation: slideUp 0.5s ease-out both;
+    }
+    .kpi-card:nth-child(1) { animation-delay: 0.2s; }
+    .kpi-card:nth-child(2) { animation-delay: 0.4s; }
+    .kpi-card:nth-child(3) { animation-delay: 0.6s; }
+    .kpi-card.counted {
+      opacity: 1;
+      animation: pulseGlow 2s ease-in-out infinite;
+    }
+
+    .chart-line {
+      stroke-dasharray: 500;
+      stroke-dashoffset: 500;
+      animation: drawLine 1.8s ease-out 0.8s both;
+    }
+    .chart-area {
+      opacity: 0;
+      animation: fadeInArea 1s ease-out 1.6s both;
+    }
+    .chart-dot {
+      r: 0;
+      opacity: 0;
+    }
+    .chart-dot-1 { animation: popDot 0.4s ease-out 1.1s both; }
+    .chart-dot-2 { animation: popDot 0.4s ease-out 1.3s both; }
+    .chart-dot-3 { animation: popDot 0.4s ease-out 1.5s both; }
+    .chart-dot-4 { animation: popDot 0.4s ease-out 1.7s both; }
+    .chart-dot-5 { animation: popDot 0.4s ease-out 1.9s both; }
+    .chart-dot-6 { animation: popDot 0.4s ease-out 2.1s both; }
+    .chart-dot-last { animation: popLastDot 0.5s ease-out 2.3s both; }
+
+    .bar-rect {
+      transform-origin: bottom;
+      transform: scaleY(0);
+    }
+    .bar-1 { animation: growBar 0.5s ease-out 1.8s both; }
+    .bar-2 { animation: growBar 0.5s ease-out 2.0s both; }
+    .bar-3 { animation: growBar 0.5s ease-out 2.2s both; }
+    .bar-4 { animation: growBar 0.5s ease-out 2.4s both; }
+    .bar-5 { animation: growBar 0.5s ease-out 2.6s both; }
+    .bar-6 { animation: growBar 0.5s ease-out 2.8s both; }
+
+    .kpi-number { display: inline-block; }
+    .kpi-percent {
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .kpi-percent.visible {
+      opacity: 1;
+      animation: countPulse 0.4s ease-out;
+    }
+  </style>
+</head>
+<body class="bg-white text-gray-900 font-sans">
+
+  <!-- Alert Banner (shown when from=site-a) -->
+  <div id="alertBanner" class="hidden bg-blue-600 text-white text-center py-2.5 text-sm font-medium">
+    <span data-i18n="alert.banner">✓ 你的增长建议已发送到邮箱</span>
+    <button onclick="document.getElementById('alertBanner').classList.add('hidden')" class="ml-3 text-white/70 hover:text-white">&times;</button>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-gray-100">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-2 text-xl font-bold text-gray-900">
+        <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M36 10L54 10C54 10 54 10 54 10L54 28" stroke="#2563EB" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M16 48L50 14" stroke="#2563EB" stroke-width="12" stroke-linecap="round"/>
+        </svg>
+        Solo<span class="text-blue-600">Max</span>
+      </a>
+      <div class="flex items-center gap-3 sm:gap-4">
+        <button id="langToggle" onclick="toggleLang()" class="text-sm text-gray-500 hover:text-gray-900 font-medium px-2 py-1 rounded hover:bg-gray-100 transition">EN</button>
+        <a href="#" class="hidden sm:inline text-sm text-gray-600 hover:text-blue-600 transition" data-i18n="nav.trial">免费试用增长建议</a>
+        <a href="#waitlist" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition" data-i18n="nav.cta">加入等待列表</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="max-w-6xl mx-auto px-4 sm:px-6 pt-16 sm:pt-24 pb-16 sm:pb-20">
+    <div class="grid lg:grid-cols-2 gap-12 items-center">
+      <div>
+        <h1 class="text-4xl sm:text-5xl font-extrabold leading-tight tracking-tight" data-i18n="hero.title">你的 AI 增长团队</h1>
+        <p class="mt-5 text-lg text-gray-500 leading-relaxed max-w-lg" data-i18n="hero.subtitle">自动产出 SEO文章、社媒内容、ASO方案、Cold Email —— 一个平台搞定所有增长内容</p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="#waitlist" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition text-base" data-i18n="hero.cta">加入等待列表</a>
+          <a href="#features" class="border border-blue-600 text-blue-600 hover:bg-blue-50 font-semibold px-6 py-3 rounded-lg transition text-base" data-i18n="hero.demo">查看产品演示 ↓</a>
+        </div>
+      </div>
+      <!-- Growth Charts -->
+      <div id="heroCharts" class="hero-chart-container bg-gray-50 border border-gray-200 rounded-xl p-6 shadow-sm">
+        <!-- KPI Cards -->
+        <div class="grid grid-cols-3 gap-3 mb-5">
+          <div class="kpi-card bg-white border border-gray-200 rounded-lg p-3">
+            <div class="text-xs text-gray-400 mb-1" data-i18n="hero.chart.users">用户数</div>
+            <div class="text-lg font-bold text-gray-900"><span class="kpi-number" data-target="12847" data-prefix="" data-suffix="">0</span></div>
+            <div class="kpi-percent text-xs text-green-600 font-medium">↑ 234%</div>
+          </div>
+          <div class="kpi-card bg-white border border-gray-200 rounded-lg p-3">
+            <div class="text-xs text-gray-400 mb-1" data-i18n="hero.chart.revenue">月收入</div>
+            <div class="text-lg font-bold text-gray-900"><span class="kpi-number" data-target="8420" data-prefix="$" data-suffix="">0</span></div>
+            <div class="kpi-percent text-xs text-green-600 font-medium">↑ 186%</div>
+          </div>
+          <div class="kpi-card bg-white border border-gray-200 rounded-lg p-3">
+            <div class="text-xs text-gray-400 mb-1" data-i18n="hero.chart.traffic">自然流量</div>
+            <div class="text-lg font-bold text-gray-900"><span class="kpi-number" data-target="45200" data-prefix="" data-suffix="K" data-divide="1000" data-decimal="1">0</span></div>
+            <div class="kpi-percent text-xs text-green-600 font-medium">↑ 312%</div>
+          </div>
+        </div>
+        <!-- User Growth Chart -->
+        <div class="bg-white border border-gray-200 rounded-lg p-4 mb-3">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-medium text-gray-500" data-i18n="hero.chart.userGrowth">用户增长趋势</span>
+            <span class="text-xs text-blue-600 font-medium" data-i18n="hero.chart.6months">近 6 个月</span>
+          </div>
+          <svg viewBox="-4 -8 316 92" class="w-full overflow-visible" fill="none">
+            <line x1="4" y1="20" x2="304" y2="20" stroke="#f3f4f6" stroke-width="1"/>
+            <line x1="4" y1="40" x2="304" y2="40" stroke="#f3f4f6" stroke-width="1"/>
+            <line x1="4" y1="60" x2="304" y2="60" stroke="#f3f4f6" stroke-width="1"/>
+            <!-- Area fill (animated) -->
+            <path class="chart-area" d="M4,70 L54,62 L104,55 L154,42 L204,28 L254,18 L296,5 L296,80 L4,80 Z" fill="url(#blueGradient)"/>
+            <!-- Line (draw animation) -->
+            <polyline class="chart-line" points="4,70 54,62 104,55 154,42 204,28 254,18 296,5" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- Dots (pop in staggered) -->
+            <circle class="chart-dot chart-dot-1" cx="4" cy="70" r="3" fill="#2563EB"/>
+            <circle class="chart-dot chart-dot-2" cx="54" cy="62" r="3" fill="#2563EB"/>
+            <circle class="chart-dot chart-dot-3" cx="104" cy="55" r="3" fill="#2563EB"/>
+            <circle class="chart-dot chart-dot-4" cx="154" cy="42" r="3" fill="#2563EB"/>
+            <circle class="chart-dot chart-dot-5" cx="204" cy="28" r="3" fill="#2563EB"/>
+            <circle class="chart-dot chart-dot-6" cx="254" cy="18" r="3" fill="#2563EB"/>
+            <circle class="chart-dot chart-dot-last" cx="296" cy="5" r="4" fill="#2563EB" stroke="white" stroke-width="2"/>
+            <defs>
+              <linearGradient id="blueGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#2563EB"/>
+                <stop offset="100%" stop-color="#2563EB" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <!-- Revenue Bar Chart -->
+        <div class="bg-white border border-gray-200 rounded-lg p-4">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-medium text-gray-500" data-i18n="hero.chart.revenueGrowth">收入增长趋势</span>
+            <span class="text-xs text-green-600 font-medium">MRR</span>
+          </div>
+          <svg viewBox="0 0 300 65" class="w-full" fill="none">
+            <rect class="bar-rect bar-1" x="5" y="48" width="35" height="12" rx="2" fill="#e5e7eb"/>
+            <rect class="bar-rect bar-2" x="52" y="42" width="35" height="18" rx="2" fill="#e5e7eb"/>
+            <rect class="bar-rect bar-3" x="99" y="35" width="35" height="25" rx="2" fill="#dbeafe"/>
+            <rect class="bar-rect bar-4" x="146" y="25" width="35" height="35" rx="2" fill="#dbeafe"/>
+            <rect class="bar-rect bar-5" x="193" y="15" width="35" height="45" rx="2" fill="#93c5fd"/>
+            <rect class="bar-rect bar-6" x="240" y="5" width="35" height="55" rx="2" fill="#2563EB"/>
+            <text x="22" y="64" text-anchor="middle" fill="#9ca3af" font-size="6">Oct</text>
+            <text x="69" y="64" text-anchor="middle" fill="#9ca3af" font-size="6">Nov</text>
+            <text x="116" y="64" text-anchor="middle" fill="#9ca3af" font-size="6">Dec</text>
+            <text x="163" y="64" text-anchor="middle" fill="#9ca3af" font-size="6">Jan</text>
+            <text x="210" y="64" text-anchor="middle" fill="#9ca3af" font-size="6">Feb</text>
+            <text x="257" y="64" text-anchor="middle" fill="#9ca3af" font-size="6">Mar</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pain Points Section -->
+  <section class="bg-gray-50 py-16 sm:py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <h2 class="text-3xl font-bold text-center mb-12" data-i18n="pain.title">你是不是也在经历这些？</h2>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div class="bg-white border border-gray-200 rounded-xl p-6">
+          <div class="text-2xl mb-3">⏰</div>
+          <p class="text-gray-700 leading-relaxed" data-i18n="pain.1">知道要做SEO，但写一篇文章要花一整天</p>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-xl p-6">
+          <div class="text-2xl mb-3">👻</div>
+          <p class="text-gray-700 leading-relaxed" data-i18n="pain.2">社媒账号注册了一堆，全是僵尸号</p>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-xl p-6">
+          <div class="text-2xl mb-3">🤯</div>
+          <p class="text-gray-700 leading-relaxed" data-i18n="pain.3">看了100篇增长教程，还是不知道从哪开始</p>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-xl p-6">
+          <div class="text-2xl mb-3">💸</div>
+          <p class="text-gray-700 leading-relaxed" data-i18n="pain.4">请不起增长团队，自己又分身乏术</p>
+        </div>
+      </div>
+      <p class="text-center text-gray-500 mt-10 text-lg" data-i18n="pain.transition">SoloMax Web 就是为了解决这些问题而生</p>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="py-16 sm:py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <h2 class="text-3xl font-bold text-center mb-4" data-i18n="features.title">一个平台，覆盖所有增长渠道</h2>
+      <p class="text-center text-gray-500 mb-12 max-w-2xl mx-auto" data-i18n="features.subtitle">从内容生产到渠道分发，一站式解决增长难题</p>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- SEO -->
+        <div class="relative bg-white border border-gray-200 rounded-xl p-6 hover:border-blue-300 hover:shadow-md transition">
+          <span class="absolute top-4 right-4 text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded" data-i18n="features.badge">即将上线</span>
+          <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 font-bold text-lg mb-4">S</div>
+          <h3 class="font-semibold text-lg mb-2" data-i18n="features.seo.title">SEO 内容引擎</h3>
+          <p class="text-gray-500 text-sm leading-relaxed" data-i18n="features.seo.desc">输入关键词，自动生成符合搜索意图的长文章，内置专业SEO知识库</p>
+        </div>
+        <!-- Social Media -->
+        <div class="relative bg-white border border-gray-200 rounded-xl p-6 hover:border-blue-300 hover:shadow-md transition">
+          <span class="absolute top-4 right-4 text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded" data-i18n="features.badge2">即将上线</span>
+          <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 font-bold text-lg mb-4">M</div>
+          <h3 class="font-semibold text-lg mb-2" data-i18n="features.social.title">社媒内容工厂</h3>
+          <p class="text-gray-500 text-sm leading-relaxed" data-i18n="features.social.desc">一键生成适配 Twitter/Reddit/小红书 等平台的内容，了解每个平台的调性</p>
+        </div>
+        <!-- ASO -->
+        <div class="relative bg-white border border-gray-200 rounded-xl p-6 hover:border-blue-300 hover:shadow-md transition">
+          <span class="absolute top-4 right-4 text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded" data-i18n="features.badge3">即将上线</span>
+          <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 font-bold text-lg mb-4">A</div>
+          <h3 class="font-semibold text-lg mb-2" data-i18n="features.aso.title">ASO 优化助手</h3>
+          <p class="text-gray-500 text-sm leading-relaxed" data-i18n="features.aso.desc">应用商店标题、描述、关键词全套优化，基于真实排名数据</p>
+        </div>
+        <!-- Cold Email -->
+        <div class="relative bg-white border border-gray-200 rounded-xl p-6 hover:border-blue-300 hover:shadow-md transition">
+          <span class="absolute top-4 right-4 text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded" data-i18n="features.badge4">即将上线</span>
+          <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 font-bold text-lg mb-4">E</div>
+          <h3 class="font-semibold text-lg mb-2" data-i18n="features.email.title">Cold Email 生成器</h3>
+          <p class="text-gray-500 text-sm leading-relaxed" data-i18n="features.email.desc">个性化外发邮件，支持批量生成，附带最佳实践模板</p>
+        </div>
+        <!-- GEO -->
+        <div class="relative bg-white border border-gray-200 rounded-xl p-6 hover:border-blue-300 hover:shadow-md transition">
+          <span class="absolute top-4 right-4 text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded" data-i18n="features.badge5">即将上线</span>
+          <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 font-bold text-lg mb-4">G</div>
+          <h3 class="font-semibold text-lg mb-2" data-i18n="features.geo.title">GEO 内容优化</h3>
+          <p class="text-gray-500 text-sm leading-relaxed" data-i18n="features.geo.desc">针对 AI 搜索引擎优化你的内容，抢占下一代搜索入口</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Differentiation Section -->
+  <section class="bg-gray-50 py-16 sm:py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <h2 class="text-3xl font-bold text-center mb-12" data-i18n="diff.title">不只是AI写作，是增长专家</h2>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="bg-white border border-gray-200 rounded-xl p-6">
+          <div class="text-sm font-semibold text-blue-600 mb-3" data-i18n="diff.ai.label">vs 通用 AI 工具</div>
+          <p class="text-gray-600 text-sm leading-relaxed" data-i18n="diff.ai.text">ChatGPT能写文章，但不懂SEO排名因素、不懂Reddit社区规则、不懂ASO算法。SoloMax Web 内置各领域专业知识库，产出可直接执行的增长资产。</p>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-xl p-6">
+          <div class="text-sm font-semibold text-blue-600 mb-3" data-i18n="diff.hire.label">vs 请人做</div>
+          <p class="text-gray-600 text-sm leading-relaxed" data-i18n="diff.hire.text">一个增长团队月薪数万。SoloMax Web 让一个人拥有整个增长团队的产出能力。</p>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-xl p-6">
+          <div class="text-sm font-semibold text-blue-600 mb-3" data-i18n="diff.diy.label">vs 自己学</div>
+          <p class="text-gray-600 text-sm leading-relaxed" data-i18n="diff.diy.text">学完所有增长知识要几个月。SoloMax Web 把专家知识内置在系统里，你只需要点击生成。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Social Proof Section -->
+  <section class="py-16 sm:py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 text-center">
+      <h2 class="text-3xl font-bold mb-2">
+        <span data-i18n="proof.title.pre">已有</span>
+        <span id="waitlistCount" class="text-blue-600 mx-1">0</span>
+        <span data-i18n="proof.title.post">位创造者在等待</span>
+      </h2>
+      <p class="text-gray-500 mb-12" data-i18n="proof.subtitle">加入他们，抢先体验下一代增长工具</p>
+      <div class="grid md:grid-cols-3 gap-6 max-w-3xl mx-auto">
+        <div class="bg-gray-50 border border-gray-200 rounded-xl p-5 text-left">
+          <p class="text-gray-600 text-sm leading-relaxed" data-i18n="proof.quote1">"终于有一个工具把所有增长渠道整合到一起了，等不及要试用。"</p>
+          <p class="text-xs text-gray-400 mt-3" data-i18n="proof.author1">— 独立开发者</p>
+        </div>
+        <div class="bg-gray-50 border border-gray-200 rounded-xl p-5 text-left">
+          <p class="text-gray-600 text-sm leading-relaxed" data-i18n="proof.quote2">"作为一个人的团队，最需要的就是这种自动化增长平台。"</p>
+          <p class="text-xs text-gray-400 mt-3" data-i18n="proof.author2">— SaaS 创始人</p>
+        </div>
+        <div class="bg-gray-50 border border-gray-200 rounded-xl p-5 text-left">
+          <p class="text-gray-600 text-sm leading-relaxed" data-i18n="proof.quote3">"内置专业知识库这个思路太对了，通用AI写出来的东西根本没法直接用。"</p>
+          <p class="text-xs text-gray-400 mt-3" data-i18n="proof.author3">— 内容营销经理</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Waitlist Section -->
+  <section id="waitlist" class="bg-blue-50 py-16 sm:py-20">
+    <div class="max-w-xl mx-auto px-4 sm:px-6 text-center">
+      <h2 class="text-3xl font-bold mb-3" data-i18n="waitlist.title">抢先体验 SoloMax Web</h2>
+      <p class="text-gray-500 mb-8" data-i18n="waitlist.subtitle">前 1000 名注册用户将获得终身早鸟价格</p>
+      <form id="waitlistForm" class="space-y-4" onsubmit="handleSubmit(event)">
+        <input
+          id="emailInput"
+          type="email"
+          required
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+          data-i18n-placeholder="waitlist.email.placeholder"
+          placeholder="your@email.com"
+        >
+        <select
+          id="productType"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base text-gray-700 bg-white"
+        >
+          <option value="" data-i18n="waitlist.type.default">选择你的产品类型（可选）</option>
+          <option value="saas" data-i18n="waitlist.type.saas">SaaS</option>
+          <option value="app" data-i18n="waitlist.type.app">App</option>
+          <option value="content" data-i18n="waitlist.type.content">内容站</option>
+          <option value="ecommerce" data-i18n="waitlist.type.ecommerce">电商</option>
+          <option value="other" data-i18n="waitlist.type.other">其他</option>
+        </select>
+        <button
+          type="submit"
+          class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition text-base"
+          data-i18n="waitlist.submit"
+        >加入等待列表</button>
+      </form>
+      <!-- Success Message -->
+      <div id="successMsg" class="hidden mt-6 p-4 bg-white border border-green-200 rounded-lg">
+        <p class="text-green-700 font-medium" data-i18n="waitlist.success">🎉 感谢加入！我们会尽快通知你。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-gray-200 py-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-400">
+      <span>Solo<span class="text-blue-600 font-semibold">Max</span> &copy; 2026</span>
+      <div class="flex gap-6">
+        <a href="#" class="hover:text-gray-600 transition" data-i18n="footer.about">关于我们</a>
+        <a href="#" class="hover:text-gray-600 transition" data-i18n="footer.contact">联系方式</a>
+        <a href="#" class="hover:text-gray-600 transition" data-i18n="footer.privacy">隐私政策</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ==================== i18n ====================
+    const i18n = {
+      zh: {
+        'alert.banner': '✓ 你的增长建议已发送到邮箱',
+        'nav.trial': '免费试用增长建议',
+        'nav.cta': '加入等待列表',
+        'hero.title': '你的 AI 增长团队',
+        'hero.subtitle': '自动产出 SEO文章、社媒内容、ASO方案、Cold Email —— 一个平台搞定所有增长内容',
+        'hero.cta': '加入等待列表',
+        'hero.demo': '查看产品演示 ↓',
+        'hero.chart.users': '用户数',
+        'hero.chart.revenue': '月收入',
+        'hero.chart.traffic': '自然流量',
+        'hero.chart.userGrowth': '用户增长趋势',
+        'hero.chart.6months': '近 6 个月',
+        'hero.chart.revenueGrowth': '收入增长趋势',
+        'pain.title': '你是不是也在经历这些？',
+        'pain.1': '知道要做SEO，但写一篇文章要花一整天',
+        'pain.2': '社媒账号注册了一堆，全是僵尸号',
+        'pain.3': '看了100篇增长教程，还是不知道从哪开始',
+        'pain.4': '请不起增长团队，自己又分身乏术',
+        'pain.transition': 'SoloMax Web 就是为了解决这些问题而生',
+        'features.title': '一个平台，覆盖所有增长渠道',
+        'features.subtitle': '从内容生产到渠道分发，一站式解决增长难题',
+        'features.badge': '即将上线',
+        'features.badge2': '即将上线',
+        'features.badge3': '即将上线',
+        'features.badge4': '即将上线',
+        'features.badge5': '即将上线',
+        'features.seo.title': 'SEO 内容引擎',
+        'features.seo.desc': '输入关键词，自动生成符合搜索意图的长文章，内置专业SEO知识库',
+        'features.social.title': '社媒内容工厂',
+        'features.social.desc': '一键生成适配 Twitter/Reddit/小红书 等平台的内容，了解每个平台的调性',
+        'features.aso.title': 'ASO 优化助手',
+        'features.aso.desc': '应用商店标题、描述、关键词全套优化，基于真实排名数据',
+        'features.email.title': 'Cold Email 生成器',
+        'features.email.desc': '个性化外发邮件，支持批量生成，附带最佳实践模板',
+        'features.geo.title': 'GEO 内容优化',
+        'features.geo.desc': '针对 AI 搜索引擎优化你的内容，抢占下一代搜索入口',
+        'diff.title': '不只是AI写作，是增长专家',
+        'diff.ai.label': 'vs 通用 AI 工具',
+        'diff.ai.text': 'ChatGPT能写文章，但不懂SEO排名因素、不懂Reddit社区规则、不懂ASO算法。SoloMax Web 内置各领域专业知识库，产出可直接执行的增长资产。',
+        'diff.hire.label': 'vs 请人做',
+        'diff.hire.text': '一个增长团队月薪数万。SoloMax Web 让一个人拥有整个增长团队的产出能力。',
+        'diff.diy.label': 'vs 自己学',
+        'diff.diy.text': '学完所有增长知识要几个月。SoloMax Web 把专家知识内置在系统里，你只需要点击生成。',
+        'proof.title.pre': '已有',
+        'proof.title.post': '位创造者在等待',
+        'proof.subtitle': '加入他们，抢先体验下一代增长工具',
+        'proof.quote1': '"终于有一个工具把所有增长渠道整合到一起了，等不及要试用。"',
+        'proof.author1': '— 独立开发者',
+        'proof.quote2': '"作为一个人的团队，最需要的就是这种自动化增长平台。"',
+        'proof.author2': '— SaaS 创始人',
+        'proof.quote3': '"内置专业知识库这个思路太对了，通用AI写出来的东西根本没法直接用。"',
+        'proof.author3': '— 内容营销经理',
+        'waitlist.title': '抢先体验 SoloMax Web',
+        'waitlist.subtitle': '前 1000 名注册用户将获得终身早鸟价格',
+        'waitlist.email.placeholder': '请输入你的邮箱',
+        'waitlist.type.default': '选择你的产品类型（可选）',
+        'waitlist.type.saas': 'SaaS',
+        'waitlist.type.app': 'App',
+        'waitlist.type.content': '内容站',
+        'waitlist.type.ecommerce': '电商',
+        'waitlist.type.other': '其他',
+        'waitlist.submit': '加入等待列表',
+        'waitlist.success': '🎉 感谢加入！我们会尽快通知你。',
+        'footer.about': '关于我们',
+        'footer.contact': '联系方式',
+        'footer.privacy': '隐私政策',
+      },
+      en: {
+        'alert.banner': '✓ Your growth advice has been sent to your email',
+        'nav.trial': 'Free Growth Advice',
+        'nav.cta': 'Join Waitlist',
+        'hero.title': 'Your AI Growth Team',
+        'hero.subtitle': 'Auto-generate SEO articles, social media content, ASO strategies, and Cold Emails — one platform for all your growth content',
+        'hero.cta': 'Join Waitlist',
+        'hero.demo': 'See Product Demo ↓',
+        'hero.chart.users': 'Users',
+        'hero.chart.revenue': 'MRR',
+        'hero.chart.traffic': 'Organic Traffic',
+        'hero.chart.userGrowth': 'User Growth',
+        'hero.chart.6months': 'Last 6 months',
+        'hero.chart.revenueGrowth': 'Revenue Growth',
+        'pain.title': 'Sound familiar?',
+        'pain.1': 'You know SEO matters, but writing one article takes all day',
+        'pain.2': 'You signed up for every social platform, but they\'re all ghost towns',
+        'pain.3': 'You\'ve read 100 growth tutorials and still don\'t know where to start',
+        'pain.4': 'You can\'t afford a growth team, and you\'re already stretched thin',
+        'pain.transition': 'SoloMax Web was built to solve exactly these problems',
+        'features.title': 'One platform, every growth channel',
+        'features.subtitle': 'From content creation to channel distribution, solve all growth challenges in one place',
+        'features.badge': 'Coming Soon',
+        'features.badge2': 'Coming Soon',
+        'features.badge3': 'Coming Soon',
+        'features.badge4': 'Coming Soon',
+        'features.badge5': 'Coming Soon',
+        'features.seo.title': 'SEO Content Engine',
+        'features.seo.desc': 'Enter keywords, auto-generate search-intent-optimized long-form articles with built-in professional SEO knowledge base',
+        'features.social.title': 'Social Media Factory',
+        'features.social.desc': 'One-click content generation for Twitter, Reddit, Xiaohongshu and more, tailored to each platform\'s style',
+        'features.aso.title': 'ASO Optimizer',
+        'features.aso.desc': 'Full app store optimization — titles, descriptions, keywords — based on real ranking data',
+        'features.email.title': 'Cold Email Generator',
+        'features.email.desc': 'Personalized outbound emails with bulk generation support and best-practice templates',
+        'features.geo.title': 'GEO Content Optimizer',
+        'features.geo.desc': 'Optimize your content for AI search engines and capture the next generation of search traffic',
+        'diff.title': 'Not just AI writing — a growth expert',
+        'diff.ai.label': 'vs Generic AI Tools',
+        'diff.ai.text': 'ChatGPT can write articles, but it doesn\'t understand SEO ranking factors, Reddit community rules, or ASO algorithms. SoloMax Web has built-in domain expertise to produce ready-to-execute growth assets.',
+        'diff.hire.label': 'vs Hiring a Team',
+        'diff.hire.text': 'A growth team costs tens of thousands per month. SoloMax Web gives one person the output capacity of an entire growth team.',
+        'diff.diy.label': 'vs Learning It Yourself',
+        'diff.diy.text': 'Mastering all growth knowledge takes months. SoloMax Web embeds expert knowledge in the system — just click and generate.',
+        'proof.title.pre': '',
+        'proof.title.post': 'creators are waiting',
+        'proof.subtitle': 'Join them and get early access to the next-gen growth tool',
+        'proof.quote1': '"Finally a tool that brings all growth channels together. Can\'t wait to try it."',
+        'proof.author1': '— Indie Developer',
+        'proof.quote2': '"As a one-person team, this is exactly the kind of automated growth platform I need."',
+        'proof.author2': '— SaaS Founder',
+        'proof.quote3': '"Built-in domain knowledge is the right approach. Generic AI output just isn\'t usable as-is."',
+        'proof.author3': '— Content Marketing Manager',
+        'waitlist.title': 'Get Early Access to SoloMax Web',
+        'waitlist.subtitle': 'First 1,000 users get lifetime early-bird pricing',
+        'waitlist.email.placeholder': 'Enter your email',
+        'waitlist.type.default': 'Select your product type (optional)',
+        'waitlist.type.saas': 'SaaS',
+        'waitlist.type.app': 'App',
+        'waitlist.type.content': 'Content Site',
+        'waitlist.type.ecommerce': 'E-commerce',
+        'waitlist.type.other': 'Other',
+        'waitlist.submit': 'Join Waitlist',
+        'waitlist.success': '🎉 Thanks for joining! We\'ll notify you soon.',
+        'footer.about': 'About',
+        'footer.contact': 'Contact',
+        'footer.privacy': 'Privacy Policy',
+      }
+    };
+
+    let currentLang = navigator.language.startsWith('zh') ? 'zh' : 'en';
+
+    function applyLang(lang) {
+      currentLang = lang;
+      document.documentElement.lang = lang === 'zh' ? 'zh' : 'en';
+      document.getElementById('langToggle').textContent = lang === 'zh' ? 'EN' : '中文';
+
+      // Update text content
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (i18n[lang][key] !== undefined) {
+          if (el.tagName === 'OPTION') {
+            el.textContent = i18n[lang][key];
+          } else {
+            el.textContent = i18n[lang][key];
+          }
+        }
+      });
+
+      // Update placeholders
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (i18n[lang][key] !== undefined) {
+          el.placeholder = i18n[lang][key];
+        }
+      });
+
+      // Update page title
+      document.title = lang === 'zh'
+        ? 'SoloMax Web - 你的 AI 增长团队'
+        : 'SoloMax Web - Your AI Growth Team';
+    }
+
+    function toggleLang() {
+      applyLang(currentLang === 'zh' ? 'en' : 'zh');
+    }
+
+    // ==================== URL Params ====================
+    function handleUrlParams() {
+      const params = new URLSearchParams(window.location.search);
+      const email = params.get('email');
+      const from = params.get('from');
+
+      if (email) {
+        document.getElementById('emailInput').value = decodeURIComponent(email);
+      }
+      if (from === 'site-a') {
+        document.getElementById('alertBanner').classList.remove('hidden');
+      }
+    }
+
+    // ==================== Waitlist Counter ====================
+    function animateCounter() {
+      const el = document.getElementById('waitlistCount');
+      const target = 200 + Math.floor(Math.random() * 80);
+      let current = 0;
+      const step = Math.ceil(target / 40);
+      const timer = setInterval(() => {
+        current += step;
+        if (current >= target) {
+          current = target;
+          clearInterval(timer);
+        }
+        el.textContent = current;
+      }, 30);
+    }
+
+    // ==================== Waitlist Submit ====================
+    async function submitWaitlist(email, productType) {
+      // TODO: Replace with real API endpoint
+      const response = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, productType }),
+      });
+      return response.json();
+    }
+
+    function handleSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById('emailInput').value;
+      const productType = document.getElementById('productType').value;
+
+      // Try API call, show success regardless (since API is a stub)
+      submitWaitlist(email, productType).catch(() => {});
+
+      // Show success
+      document.getElementById('waitlistForm').classList.add('hidden');
+      document.getElementById('successMsg').classList.remove('hidden');
+    }
+
+    // ==================== KPI Counter Animation ====================
+    function animateKPIs() {
+      document.querySelectorAll('.kpi-number').forEach((el, i) => {
+        const target = parseInt(el.dataset.target);
+        const prefix = el.dataset.prefix || '';
+        const suffix = el.dataset.suffix || '';
+        const divide = parseFloat(el.dataset.divide) || 1;
+        const decimal = parseInt(el.dataset.decimal) || 0;
+        const duration = 1200;
+        const startTime = performance.now();
+        const delay = 200 + i * 200; // stagger each card
+
+        setTimeout(() => {
+          function tick(now) {
+            const elapsed = now - startTime - delay;
+            const progress = Math.min(elapsed / duration, 1);
+            // ease-out cubic
+            const eased = 1 - Math.pow(1 - progress, 3);
+            const current = Math.round(eased * target);
+            const display = divide > 1
+              ? (current / divide).toFixed(decimal)
+              : current.toLocaleString();
+            el.textContent = prefix + display + suffix;
+
+            if (progress < 1) {
+              requestAnimationFrame(tick);
+            } else {
+              // Show percentage with pulse
+              const card = el.closest('.kpi-card');
+              const pct = card.querySelector('.kpi-percent');
+              if (pct) pct.classList.add('visible');
+              card.classList.add('counted');
+            }
+          }
+          requestAnimationFrame(tick);
+        }, delay);
+      });
+    }
+
+    // ==================== Init ====================
+    applyLang(currentLang);
+    handleUrlParams();
+    animateKPIs();
+
+    // Animate counter when section comes into view
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateCounter();
+          observer.disconnect();
+        }
+      });
+    }, { threshold: 0.3 });
+    observer.observe(document.getElementById('waitlistCount'));
+  </script>
+
+</body>
+</html>
