@@ -16,6 +16,11 @@
         extend: {
           fontFamily: {
             sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'sans-serif'],
+          },
+          spacing: {
+            '4.5': '1.125rem',
+            '15': '3.75rem',
+            '18': '4.5rem',
           }
         }
       }
@@ -121,36 +126,36 @@
 <body class="bg-white text-gray-900 font-sans">
 
   <!-- Alert Banner (shown when from=site-a) -->
-  <div id="alertBanner" class="hidden bg-blue-600 text-white text-center py-2.5 text-sm font-medium">
+  <div id="alertBanner" class="hidden bg-blue-600 text-white text-center py-3 text-sm font-medium">
     <span data-i18n="alert.banner">✓ 你的增长建议已发送到邮箱</span>
     <button onclick="document.getElementById('alertBanner').classList.add('hidden')" class="ml-3 text-white/70 hover:text-white">&times;</button>
   </div>
 
   <!-- Navigation -->
   <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-gray-100">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-      <a href="#" class="flex items-center gap-2 text-xl font-bold text-gray-900">
+    <div class="max-w-6xl mx-auto px-6 h-15 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-1.5 text-xl font-bold text-gray-900">
         <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M36 10L54 10C54 10 54 10 54 10L54 28" stroke="#2563EB" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
           <path d="M16 48L50 14" stroke="#2563EB" stroke-width="12" stroke-linecap="round"/>
         </svg>
-        Solo<span class="text-blue-600">Max</span>
+        <span>Solo<span class="text-blue-600">Max</span></span>
       </a>
-      <div class="flex items-center gap-3 sm:gap-4">
-        <button id="langToggle" onclick="toggleLang()" class="text-sm text-gray-500 hover:text-gray-900 font-medium px-2 py-1 rounded hover:bg-gray-100 transition">EN</button>
+      <div class="flex items-center gap-3">
+        <button id="langToggle" onclick="toggleLang()" class="text-sm text-gray-500 hover:text-gray-900 font-medium px-1.5 py-1.5 rounded hover:bg-gray-100 transition">EN</button>
         <a href="#" class="hidden sm:inline text-sm text-gray-600 hover:text-blue-600 transition" data-i18n="nav.trial">免费试用增长建议</a>
-        <a href="#waitlist" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition" data-i18n="nav.cta">加入等待列表</a>
+        <a href="#waitlist" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-3 py-1.5 rounded-lg transition" data-i18n="nav.cta">加入等待列表</a>
       </div>
     </div>
   </nav>
 
   <!-- Hero Section -->
-  <section class="max-w-6xl mx-auto px-4 sm:px-6 pt-16 sm:pt-24 pb-16 sm:pb-20">
+  <section class="max-w-6xl mx-auto px-6 pt-15 sm:pt-24 pb-15 sm:pb-18">
     <div class="grid lg:grid-cols-2 gap-12 items-center">
       <div>
         <h1 class="text-4xl sm:text-5xl font-extrabold leading-tight tracking-tight" data-i18n="hero.title">你的 AI 增长团队</h1>
-        <p class="mt-5 text-lg text-gray-500 leading-relaxed max-w-lg" data-i18n="hero.subtitle">自动产出 SEO文章、社媒内容、ASO方案、Cold Email —— 一个平台搞定所有增长内容</p>
-        <div class="mt-8 flex flex-wrap gap-3">
+        <p class="mt-6 text-lg text-gray-500 leading-relaxed max-w-lg" data-i18n="hero.subtitle">自动产出 SEO文章、社媒内容、ASO方案、Cold Email —— 一个平台搞定所有增长内容</p>
+        <div class="mt-9 flex flex-wrap gap-3">
           <a href="#waitlist" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition text-base" data-i18n="hero.cta">加入等待列表</a>
           <a href="#features" class="border border-blue-600 text-blue-600 hover:bg-blue-50 font-semibold px-6 py-3 rounded-lg transition text-base" data-i18n="hero.demo">查看产品演示 ↓</a>
         </div>
@@ -158,7 +163,7 @@
       <!-- Growth Charts -->
       <div id="heroCharts" class="hero-chart-container bg-gray-50 border border-gray-200 rounded-xl p-6 shadow-sm">
         <!-- KPI Cards -->
-        <div class="grid grid-cols-3 gap-3 mb-5">
+        <div class="grid grid-cols-3 gap-3 mb-6">
           <div class="kpi-card bg-white border border-gray-200 rounded-lg p-3">
             <div class="text-xs text-gray-400 mb-1" data-i18n="hero.chart.users">用户数</div>
             <div class="text-lg font-bold text-gray-900"><span class="kpi-number" data-target="12847" data-prefix="" data-suffix="">0</span></div>
@@ -176,7 +181,7 @@
           </div>
         </div>
         <!-- User Growth Chart -->
-        <div class="bg-white border border-gray-200 rounded-lg p-4 mb-3">
+        <div class="bg-white border border-gray-200 rounded-lg p-3 mb-3">
           <div class="flex items-center justify-between mb-3">
             <span class="text-xs font-medium text-gray-500" data-i18n="hero.chart.userGrowth">用户增长趋势</span>
             <span class="text-xs text-blue-600 font-medium" data-i18n="hero.chart.6months">近 6 个月</span>
@@ -206,7 +211,7 @@
           </svg>
         </div>
         <!-- Revenue Bar Chart -->
-        <div class="bg-white border border-gray-200 rounded-lg p-4">
+        <div class="bg-white border border-gray-200 rounded-lg p-3">
           <div class="flex items-center justify-between mb-3">
             <span class="text-xs font-medium text-gray-500" data-i18n="hero.chart.revenueGrowth">收入增长趋势</span>
             <span class="text-xs text-green-600 font-medium">MRR</span>
@@ -231,10 +236,10 @@
   </section>
 
   <!-- Pain Points Section -->
-  <section class="bg-gray-50 py-16 sm:py-20">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+  <section class="bg-gray-50 py-15 sm:py-18">
+    <div class="max-w-6xl mx-auto px-6">
       <h2 class="text-3xl font-bold text-center mb-12" data-i18n="pain.title">你是不是也在经历这些？</h2>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <div class="bg-white border border-gray-200 rounded-xl p-6">
           <div class="text-2xl mb-3">⏰</div>
           <p class="text-gray-700 leading-relaxed" data-i18n="pain.1">知道要做SEO，但写一篇文章要花一整天</p>
@@ -252,49 +257,49 @@
           <p class="text-gray-700 leading-relaxed" data-i18n="pain.4">请不起增长团队，自己又分身乏术</p>
         </div>
       </div>
-      <p class="text-center text-gray-500 mt-10 text-lg" data-i18n="pain.transition">SoloMax Web 就是为了解决这些问题而生</p>
+      <p class="text-center text-gray-500 mt-12 text-lg" data-i18n="pain.transition">SoloMax Web 就是为了解决这些问题而生</p>
     </div>
   </section>
 
   <!-- Features Section -->
-  <section id="features" class="py-16 sm:py-20">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6">
-      <h2 class="text-3xl font-bold text-center mb-4" data-i18n="features.title">一个平台，覆盖所有增长渠道</h2>
+  <section id="features" class="py-15 sm:py-18">
+    <div class="max-w-6xl mx-auto px-6">
+      <h2 class="text-3xl font-bold text-center mb-3" data-i18n="features.title">一个平台，覆盖所有增长渠道</h2>
       <p class="text-center text-gray-500 mb-12 max-w-2xl mx-auto" data-i18n="features.subtitle">从内容生产到渠道分发，一站式解决增长难题</p>
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <!-- SEO -->
         <div class="relative bg-white border border-gray-200 rounded-xl p-6 hover:border-blue-300 hover:shadow-md transition">
-          <span class="absolute top-4 right-4 text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded" data-i18n="features.badge">即将上线</span>
-          <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 font-bold text-lg mb-4">S</div>
-          <h3 class="font-semibold text-lg mb-2" data-i18n="features.seo.title">SEO 内容引擎</h3>
+          <span class="absolute top-3 right-3 text-xs font-medium text-blue-600 bg-blue-50 px-1.5 py-1.5 rounded" data-i18n="features.badge">即将上线</span>
+          <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 font-bold text-lg mb-3">S</div>
+          <h3 class="font-semibold text-lg mb-1.5" data-i18n="features.seo.title">SEO 内容引擎</h3>
           <p class="text-gray-500 text-sm leading-relaxed" data-i18n="features.seo.desc">输入关键词，自动生成符合搜索意图的长文章，内置专业SEO知识库</p>
         </div>
         <!-- Social Media -->
         <div class="relative bg-white border border-gray-200 rounded-xl p-6 hover:border-blue-300 hover:shadow-md transition">
-          <span class="absolute top-4 right-4 text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded" data-i18n="features.badge2">即将上线</span>
-          <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 font-bold text-lg mb-4">M</div>
-          <h3 class="font-semibold text-lg mb-2" data-i18n="features.social.title">社媒内容工厂</h3>
+          <span class="absolute top-3 right-3 text-xs font-medium text-blue-600 bg-blue-50 px-1.5 py-1.5 rounded" data-i18n="features.badge2">即将上线</span>
+          <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 font-bold text-lg mb-3">M</div>
+          <h3 class="font-semibold text-lg mb-1.5" data-i18n="features.social.title">社媒内容工厂</h3>
           <p class="text-gray-500 text-sm leading-relaxed" data-i18n="features.social.desc">一键生成适配 Twitter/Reddit/小红书 等平台的内容，了解每个平台的调性</p>
         </div>
         <!-- ASO -->
         <div class="relative bg-white border border-gray-200 rounded-xl p-6 hover:border-blue-300 hover:shadow-md transition">
-          <span class="absolute top-4 right-4 text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded" data-i18n="features.badge3">即将上线</span>
-          <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 font-bold text-lg mb-4">A</div>
-          <h3 class="font-semibold text-lg mb-2" data-i18n="features.aso.title">ASO 优化助手</h3>
+          <span class="absolute top-3 right-3 text-xs font-medium text-blue-600 bg-blue-50 px-1.5 py-1.5 rounded" data-i18n="features.badge3">即将上线</span>
+          <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 font-bold text-lg mb-3">A</div>
+          <h3 class="font-semibold text-lg mb-1.5" data-i18n="features.aso.title">ASO 优化助手</h3>
           <p class="text-gray-500 text-sm leading-relaxed" data-i18n="features.aso.desc">应用商店标题、描述、关键词全套优化，基于真实排名数据</p>
         </div>
         <!-- Cold Email -->
         <div class="relative bg-white border border-gray-200 rounded-xl p-6 hover:border-blue-300 hover:shadow-md transition">
-          <span class="absolute top-4 right-4 text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded" data-i18n="features.badge4">即将上线</span>
-          <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 font-bold text-lg mb-4">E</div>
-          <h3 class="font-semibold text-lg mb-2" data-i18n="features.email.title">Cold Email 生成器</h3>
+          <span class="absolute top-3 right-3 text-xs font-medium text-blue-600 bg-blue-50 px-1.5 py-1.5 rounded" data-i18n="features.badge4">即将上线</span>
+          <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 font-bold text-lg mb-3">E</div>
+          <h3 class="font-semibold text-lg mb-1.5" data-i18n="features.email.title">Cold Email 生成器</h3>
           <p class="text-gray-500 text-sm leading-relaxed" data-i18n="features.email.desc">个性化外发邮件，支持批量生成，附带最佳实践模板</p>
         </div>
         <!-- GEO -->
         <div class="relative bg-white border border-gray-200 rounded-xl p-6 hover:border-blue-300 hover:shadow-md transition">
-          <span class="absolute top-4 right-4 text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded" data-i18n="features.badge5">即将上线</span>
-          <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 font-bold text-lg mb-4">G</div>
-          <h3 class="font-semibold text-lg mb-2" data-i18n="features.geo.title">GEO 内容优化</h3>
+          <span class="absolute top-3 right-3 text-xs font-medium text-blue-600 bg-blue-50 px-1.5 py-1.5 rounded" data-i18n="features.badge5">即将上线</span>
+          <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 font-bold text-lg mb-3">G</div>
+          <h3 class="font-semibold text-lg mb-1.5" data-i18n="features.geo.title">GEO 内容优化</h3>
           <p class="text-gray-500 text-sm leading-relaxed" data-i18n="features.geo.desc">针对 AI 搜索引擎优化你的内容，抢占下一代搜索入口</p>
         </div>
       </div>
@@ -302,8 +307,8 @@
   </section>
 
   <!-- Differentiation Section -->
-  <section class="bg-gray-50 py-16 sm:py-20">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+  <section class="bg-gray-50 py-15 sm:py-18">
+    <div class="max-w-6xl mx-auto px-6">
       <h2 class="text-3xl font-bold text-center mb-12" data-i18n="diff.title">不只是AI写作，是增长专家</h2>
       <div class="grid md:grid-cols-3 gap-6">
         <div class="bg-white border border-gray-200 rounded-xl p-6">
@@ -323,24 +328,24 @@
   </section>
 
   <!-- Social Proof Section -->
-  <section class="py-16 sm:py-20">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 text-center">
-      <h2 class="text-3xl font-bold mb-2">
+  <section class="py-15 sm:py-18">
+    <div class="max-w-6xl mx-auto px-6 text-center">
+      <h2 class="text-3xl font-bold mb-3">
         <span data-i18n="proof.title.pre">已有</span>
-        <span id="waitlistCount" class="text-blue-600 mx-1">0</span>
+        <span id="waitlistCount" class="text-blue-600 mx-1.5">0</span>
         <span data-i18n="proof.title.post">位创造者在等待</span>
       </h2>
       <p class="text-gray-500 mb-12" data-i18n="proof.subtitle">加入他们，抢先体验下一代增长工具</p>
       <div class="grid md:grid-cols-3 gap-6 max-w-3xl mx-auto">
-        <div class="bg-gray-50 border border-gray-200 rounded-xl p-5 text-left">
+        <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 text-left">
           <p class="text-gray-600 text-sm leading-relaxed" data-i18n="proof.quote1">"终于有一个工具把所有增长渠道整合到一起了，等不及要试用。"</p>
           <p class="text-xs text-gray-400 mt-3" data-i18n="proof.author1">— 独立开发者</p>
         </div>
-        <div class="bg-gray-50 border border-gray-200 rounded-xl p-5 text-left">
+        <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 text-left">
           <p class="text-gray-600 text-sm leading-relaxed" data-i18n="proof.quote2">"作为一个人的团队，最需要的就是这种自动化增长平台。"</p>
           <p class="text-xs text-gray-400 mt-3" data-i18n="proof.author2">— SaaS 创始人</p>
         </div>
-        <div class="bg-gray-50 border border-gray-200 rounded-xl p-5 text-left">
+        <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 text-left">
           <p class="text-gray-600 text-sm leading-relaxed" data-i18n="proof.quote3">"内置专业知识库这个思路太对了，通用AI写出来的东西根本没法直接用。"</p>
           <p class="text-xs text-gray-400 mt-3" data-i18n="proof.author3">— 内容营销经理</p>
         </div>
@@ -349,22 +354,22 @@
   </section>
 
   <!-- Waitlist Section -->
-  <section id="waitlist" class="bg-blue-50 py-16 sm:py-20">
-    <div class="max-w-xl mx-auto px-4 sm:px-6 text-center">
+  <section id="waitlist" class="bg-blue-50 py-15 sm:py-18">
+    <div class="max-w-xl mx-auto px-6 text-center">
       <h2 class="text-3xl font-bold mb-3" data-i18n="waitlist.title">抢先体验 SoloMax Web</h2>
-      <p class="text-gray-500 mb-8" data-i18n="waitlist.subtitle">前 1000 名注册用户将获得终身早鸟价格</p>
-      <form id="waitlistForm" class="space-y-4" onsubmit="handleSubmit(event)">
+      <p class="text-gray-500 mb-9" data-i18n="waitlist.subtitle">前 1000 名注册用户将获得终身早鸟价格</p>
+      <form id="waitlistForm" class="space-y-3" onsubmit="handleSubmit(event)">
         <input
           id="emailInput"
           type="email"
           required
-          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+          class="w-full px-6 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
           data-i18n-placeholder="waitlist.email.placeholder"
           placeholder="your@email.com"
         >
         <select
           id="productType"
-          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base text-gray-700 bg-white"
+          class="w-full px-6 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base text-gray-700 bg-white"
         >
           <option value="" data-i18n="waitlist.type.default">选择你的产品类型（可选）</option>
           <option value="saas" data-i18n="waitlist.type.saas">SaaS</option>
@@ -380,15 +385,15 @@
         >加入等待列表</button>
       </form>
       <!-- Success Message -->
-      <div id="successMsg" class="hidden mt-6 p-4 bg-white border border-green-200 rounded-lg">
+      <div id="successMsg" class="hidden mt-6 p-6 bg-white border border-green-200 rounded-lg">
         <p class="text-green-700 font-medium" data-i18n="waitlist.success">🎉 感谢加入！我们会尽快通知你。</p>
       </div>
     </div>
   </section>
 
   <!-- Footer -->
-  <footer class="border-t border-gray-200 py-8">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-400">
+  <footer class="border-t border-gray-200 py-9">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-6 text-sm text-gray-400">
       <span>Solo<span class="text-blue-600 font-semibold">Max</span> &copy; 2026</span>
       <div class="flex gap-6">
         <a href="#" class="hover:text-gray-600 transition" data-i18n="footer.about">关于我们</a>
