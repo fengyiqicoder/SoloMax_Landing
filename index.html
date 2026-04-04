@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SoloMax Web - Your AI Growth Team</title>
-  <meta name="description" content="SoloMax Web - AI-powered growth content platform. SEO, Social Media, ASO, Cold Email, GEO - all in one place.">
+  <title>SoloMax - Your AI Growth Team</title>
+  <meta name="description" content="SoloMax - AI-powered growth content platform. SEO, Social Media, ASO, Cold Email, GEO - all in one place.">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -121,15 +121,35 @@
       opacity: 1;
       animation: countPulse 0.4s ease-out;
     }
+    /* Content Asset Wall */
+    .asset-wall {
+      column-count: 3;
+      column-gap: 1rem;
+    }
+    @media (max-width: 1023px) {
+      .asset-wall { column-count: 2; }
+    }
+    @media (max-width: 639px) {
+      .asset-wall { column-count: 1; }
+    }
+    .asset-card {
+      break-inside: avoid;
+      margin-bottom: 1rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    }
+    .asset-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .asset-card:hover {
+      transform: scale(1.02);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
   </style>
 </head>
 <body class="bg-white text-gray-900 font-sans">
-
-  <!-- Alert Banner (shown when from=site-a) -->
-  <div id="alertBanner" class="hidden bg-blue-600 text-white text-center py-3 text-sm font-medium">
-    <span data-i18n="alert.banner">✓ 你的增长建议已发送到邮箱</span>
-    <button onclick="document.getElementById('alertBanner').classList.add('hidden')" class="ml-3 text-white/70 hover:text-white">&times;</button>
-  </div>
 
   <!-- Navigation -->
   <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-gray-100">
@@ -155,9 +175,23 @@
       <div>
         <h1 class="text-4xl sm:text-5xl font-extrabold leading-tight tracking-tight" data-i18n="hero.title">你的 AI 增长团队</h1>
         <p class="mt-6 text-lg text-gray-500 leading-relaxed max-w-lg" data-i18n="hero.subtitle">自动产出 SEO文章、社媒内容、ASO方案、Cold Email —— 一个平台搞定所有增长内容</p>
-        <div class="mt-9 flex flex-wrap gap-3">
-          <a href="#waitlist" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition text-base" data-i18n="hero.cta">加入等待列表</a>
-          <a href="#features" class="border border-blue-600 text-blue-600 hover:bg-blue-50 font-semibold px-6 py-3 rounded-lg transition text-base" data-i18n="hero.demo">查看产品演示 ↓</a>
+        <form id="heroWaitlistForm" class="mt-9 flex flex-col sm:flex-row gap-3 max-w-md" onsubmit="handleHeroSubmit(event)">
+          <input
+            id="heroEmailInput"
+            type="email"
+            required
+            class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
+            data-i18n-placeholder="waitlist.email.placeholder"
+            placeholder="请输入你的邮箱"
+          >
+          <button
+            type="submit"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition text-base whitespace-nowrap"
+            data-i18n="hero.cta"
+          >加入等待列表</button>
+        </form>
+        <div id="heroSuccessMsg" class="hidden mt-6 p-4 bg-green-50 border border-green-200 rounded-lg max-w-md">
+          <p class="text-green-700 font-medium" data-i18n="waitlist.success">🎉 感谢加入！我们会尽快通知你。</p>
         </div>
       </div>
       <!-- Growth Charts -->
@@ -257,51 +291,378 @@
           <p class="text-gray-700 leading-relaxed" data-i18n="pain.4">请不起增长团队，自己又分身乏术</p>
         </div>
       </div>
-      <p class="text-center text-gray-500 mt-12 text-lg" data-i18n="pain.transition">SoloMax Web 就是为了解决这些问题而生</p>
+      <p class="text-center text-gray-500 mt-12 text-lg" data-i18n="pain.transition">SoloMax 就是为了解决这些问题而生</p>
     </div>
   </section>
 
-  <!-- Features Section -->
+  <!-- Content Asset Wall -->
   <section id="features" class="py-15 sm:py-18">
     <div class="max-w-6xl mx-auto px-6">
-      <h2 class="text-3xl font-bold text-center mb-3" data-i18n="features.title">一个平台，覆盖所有增长渠道</h2>
-      <p class="text-center text-gray-500 mb-12 max-w-2xl mx-auto" data-i18n="features.subtitle">从内容生产到渠道分发，一站式解决增长难题</p>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- SEO -->
-        <div class="relative bg-white border border-gray-200 rounded-xl p-6 hover:border-blue-300 hover:shadow-md transition">
-          <span class="absolute top-3 right-3 text-xs font-medium text-blue-600 bg-blue-50 px-1.5 py-1.5 rounded" data-i18n="features.badge">即将上线</span>
-          <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 font-bold text-lg mb-3">S</div>
-          <h3 class="font-semibold text-lg mb-1.5" data-i18n="features.seo.title">SEO 内容引擎</h3>
-          <p class="text-gray-500 text-sm leading-relaxed" data-i18n="features.seo.desc">输入关键词，自动生成符合搜索意图的长文章，内置专业SEO知识库</p>
+      <h2 class="text-3xl font-bold text-center mb-3" data-i18n="wall.title">一个平台，产出所有增长内容</h2>
+      <p class="text-center text-gray-500 mb-12 max-w-2xl mx-auto" data-i18n="wall.subtitle">从SEO文章到Cold Email，SoloMax帮你批量产出专业级内容资产</p>
+      <div class="asset-wall">
+
+        <!-- 1. SEO Article -->
+        <div class="asset-card bg-white border border-gray-200 rounded-xl overflow-hidden">
+          <div class="bg-blue-600 px-4 py-2 flex items-center gap-2">
+            <span class="text-white text-lg">📝</span>
+            <span class="text-white text-sm font-semibold">SEO Article</span>
+          </div>
+          <div class="p-5">
+            <div class="text-xs text-gray-400 mb-1" data-i18n="wall.seo.kw">Target Keyword: "best project management tools 2026"</div>
+            <h4 class="font-bold text-base mb-2 leading-snug" data-i18n="wall.seo.h1">10 Best Project Management Tools in 2026: Complete Guide</h4>
+            <div class="text-xs font-semibold text-gray-500 mb-1" data-i18n="wall.seo.h2">Why Project Management Tools Matter</div>
+            <p class="text-xs text-gray-400 leading-relaxed" data-i18n="wall.seo.body">In today's fast-paced business environment, having the right project management tool can mean the difference between meeting deadlines and falling behind. According to PMI research, organizations that use PM tools...</p>
+            <div class="flex gap-2 mt-2">
+              <span class="text-xs bg-blue-50 text-blue-600 px-2 py-0.5 rounded">2,450 words</span>
+              <span class="text-xs bg-green-50 text-green-600 px-2 py-0.5 rounded">SEO Score: 94</span>
+            </div>
+          </div>
         </div>
-        <!-- Social Media -->
-        <div class="relative bg-white border border-gray-200 rounded-xl p-6 hover:border-blue-300 hover:shadow-md transition">
-          <span class="absolute top-3 right-3 text-xs font-medium text-blue-600 bg-blue-50 px-1.5 py-1.5 rounded" data-i18n="features.badge2">即将上线</span>
-          <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 font-bold text-lg mb-3">M</div>
-          <h3 class="font-semibold text-lg mb-1.5" data-i18n="features.social.title">社媒内容工厂</h3>
-          <p class="text-gray-500 text-sm leading-relaxed" data-i18n="features.social.desc">一键生成适配 Twitter/Reddit/小红书 等平台的内容，了解每个平台的调性</p>
+
+        <!-- 2. Twitter/X Post -->
+        <div class="asset-card bg-white border border-gray-200 rounded-xl overflow-hidden">
+          <div class="bg-blue-600 px-4 py-2 flex items-center gap-2">
+            <span class="text-white text-lg">𝕏</span>
+            <span class="text-white text-sm font-semibold">Twitter / X</span>
+          </div>
+          <div class="p-5 flex gap-3">
+            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex-shrink-0"></div>
+            <div>
+              <div class="flex items-center gap-1.5">
+                <span class="text-sm font-semibold">YourApp</span>
+                <span class="text-xs text-gray-400">@yourapp · 2h</span>
+              </div>
+              <p class="text-sm text-gray-700 mt-1 leading-relaxed" data-i18n="wall.twitter.body">We just launched our new AI writing assistant and the results are insane:
+
+- 3x faster content creation
+- 85% less time on research
+- SEO scores up 40%
+
+The future of content is here. Try it free today.</p>
+              <div class="flex gap-4 mt-2 text-xs text-gray-400">
+                <span>💬 24</span>
+                <span>🔁 89</span>
+                <span>❤️ 312</span>
+              </div>
+            </div>
+          </div>
         </div>
-        <!-- ASO -->
-        <div class="relative bg-white border border-gray-200 rounded-xl p-6 hover:border-blue-300 hover:shadow-md transition">
-          <span class="absolute top-3 right-3 text-xs font-medium text-blue-600 bg-blue-50 px-1.5 py-1.5 rounded" data-i18n="features.badge3">即将上线</span>
-          <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 font-bold text-lg mb-3">A</div>
-          <h3 class="font-semibold text-lg mb-1.5" data-i18n="features.aso.title">ASO 优化助手</h3>
-          <p class="text-gray-500 text-sm leading-relaxed" data-i18n="features.aso.desc">应用商店标题、描述、关键词全套优化，基于真实排名数据</p>
+
+        <!-- 3. Cold Email -->
+        <div class="asset-card bg-white border border-gray-200 rounded-xl overflow-hidden">
+          <div class="bg-blue-600 px-4 py-2 flex items-center gap-2">
+            <span class="text-white text-lg">✉️</span>
+            <span class="text-white text-sm font-semibold">Cold Email</span>
+          </div>
+          <div class="p-5 text-xs">
+            <div class="flex gap-2 text-gray-400 mb-1"><span class="font-medium text-gray-500">To:</span> sarah@techcorp.com</div>
+            <div class="flex gap-2 text-gray-400 mb-2"><span class="font-medium text-gray-500">Subject:</span> <span data-i18n="wall.email.subject">Quick question about your content workflow, Sarah</span></div>
+            <div class="border-t border-gray-100 pt-2">
+              <p class="text-gray-600 leading-relaxed" data-i18n="wall.email.body">Hi Sarah,
+
+I noticed TechCorp just raised Series B — congrats! With the growth ahead, I imagine content production is becoming a bottleneck.
+
+We help SaaS companies produce SEO articles, social posts, and email campaigns 5x faster with domain-specific AI.
+
+Would a 15-min demo be worth your time this week?
+
+Best,
+Alex</p>
+            </div>
+          </div>
         </div>
-        <!-- Cold Email -->
-        <div class="relative bg-white border border-gray-200 rounded-xl p-6 hover:border-blue-300 hover:shadow-md transition">
-          <span class="absolute top-3 right-3 text-xs font-medium text-blue-600 bg-blue-50 px-1.5 py-1.5 rounded" data-i18n="features.badge4">即将上线</span>
-          <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 font-bold text-lg mb-3">E</div>
-          <h3 class="font-semibold text-lg mb-1.5" data-i18n="features.email.title">Cold Email 生成器</h3>
-          <p class="text-gray-500 text-sm leading-relaxed" data-i18n="features.email.desc">个性化外发邮件，支持批量生成，附带最佳实践模板</p>
+
+        <!-- 4. Reddit Post -->
+        <div class="asset-card bg-white border border-gray-200 rounded-xl overflow-hidden">
+          <div class="bg-blue-600 px-4 py-2 flex items-center gap-2">
+            <span class="text-white text-lg">💬</span>
+            <span class="text-white text-sm font-semibold">Reddit</span>
+          </div>
+          <div class="p-5">
+            <div class="flex items-center gap-2 text-xs text-gray-400 mb-1">
+              <span class="bg-orange-500 text-white text-xs px-1.5 py-0.5 rounded">r/SaaS</span>
+              <span>u/yourapp · 6h</span>
+            </div>
+            <h4 class="font-semibold text-sm mb-1" data-i18n="wall.reddit.title">I built an AI tool that creates platform-specific content — here's what I learned</h4>
+            <p class="text-xs text-gray-500 leading-relaxed" data-i18n="wall.reddit.body">After spending 6 months writing content for 5 different platforms, I realized each one needs a completely different approach. Reddit wants authentic stories, Twitter wants punchy takes, LinkedIn wants professional insights...</p>
+            <div class="flex gap-3 mt-2 text-xs text-gray-400">
+              <span>⬆ 847</span>
+              <span>💬 156 comments</span>
+            </div>
+          </div>
         </div>
-        <!-- GEO -->
-        <div class="relative bg-white border border-gray-200 rounded-xl p-6 hover:border-blue-300 hover:shadow-md transition">
-          <span class="absolute top-3 right-3 text-xs font-medium text-blue-600 bg-blue-50 px-1.5 py-1.5 rounded" data-i18n="features.badge5">即将上线</span>
-          <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 font-bold text-lg mb-3">G</div>
-          <h3 class="font-semibold text-lg mb-1.5" data-i18n="features.geo.title">GEO 内容优化</h3>
-          <p class="text-gray-500 text-sm leading-relaxed" data-i18n="features.geo.desc">针对 AI 搜索引擎优化你的内容，抢占下一代搜索入口</p>
+
+        <!-- 5. App Store Description -->
+        <div class="asset-card bg-white border border-gray-200 rounded-xl overflow-hidden">
+          <div class="bg-blue-600 px-4 py-2 flex items-center gap-2">
+            <span class="text-white text-lg">📱</span>
+            <span class="text-white text-sm font-semibold">App Store Description</span>
+          </div>
+          <div class="p-5">
+            <div class="flex items-center gap-3 mb-2">
+              <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-400 to-purple-500"></div>
+              <div>
+                <div class="font-semibold text-sm">TaskFlow Pro</div>
+                <div class="text-xs text-gray-400">Productivity · #12 in Business</div>
+              </div>
+            </div>
+            <p class="text-xs text-gray-600 leading-relaxed" data-i18n="wall.appstore.desc">Transform how you manage projects with TaskFlow Pro — the intelligent task manager trusted by 50,000+ teams.
+
+KEY FEATURES:
+• AI-powered task prioritization
+• Real-time team collaboration
+• Smart deadline predictions
+• Seamless calendar integration</p>
+          </div>
         </div>
+
+        <!-- 6. SEO Keyword Report -->
+        <div class="asset-card bg-white border border-gray-200 rounded-xl overflow-hidden">
+          <div class="bg-blue-600 px-4 py-2 flex items-center gap-2">
+            <span class="text-white text-lg">🔍</span>
+            <span class="text-white text-sm font-semibold">SEO Keyword Report</span>
+          </div>
+          <div class="p-5">
+            <div class="text-xs font-medium text-gray-500 mb-2" data-i18n="wall.kw.header">Keyword Analysis for "AI writing tool"</div>
+            <table class="w-full text-xs">
+              <thead><tr class="text-gray-400 border-b border-gray-100">
+                <th class="text-left py-1 font-medium">Keyword</th>
+                <th class="text-right py-1 font-medium">Vol.</th>
+                <th class="text-right py-1 font-medium">KD</th>
+              </tr></thead>
+              <tbody class="text-gray-600">
+                <tr class="border-b border-gray-50"><td class="py-1">ai writing tool</td><td class="text-right">14,800</td><td class="text-right"><span class="text-red-500">78</span></td></tr>
+                <tr class="border-b border-gray-50"><td class="py-1">best ai writer</td><td class="text-right">9,200</td><td class="text-right"><span class="text-orange-500">62</span></td></tr>
+                <tr class="border-b border-gray-50"><td class="py-1">ai content generator</td><td class="text-right">6,400</td><td class="text-right"><span class="text-yellow-500">45</span></td></tr>
+                <tr class="border-b border-gray-50"><td class="py-1">ai seo writer</td><td class="text-right">2,100</td><td class="text-right"><span class="text-green-500">28</span></td></tr>
+                <tr><td class="py-1">ai blog post generator</td><td class="text-right">1,800</td><td class="text-right"><span class="text-green-500">22</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 7. LinkedIn Post -->
+        <div class="asset-card bg-white border border-gray-200 rounded-xl overflow-hidden">
+          <div class="bg-blue-600 px-4 py-2 flex items-center gap-2">
+            <span class="text-white text-lg">💼</span>
+            <span class="text-white text-sm font-semibold">LinkedIn</span>
+          </div>
+          <div class="p-5 flex gap-3">
+            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-600 to-blue-800 flex-shrink-0"></div>
+            <div>
+              <div class="text-sm font-semibold">Alex Chen</div>
+              <div class="text-xs text-gray-400">CEO at YourApp · 1d</div>
+              <p class="text-xs text-gray-600 mt-2 leading-relaxed" data-i18n="wall.linkedin.body">I spent $50,000 on content marketing last year.
+
+Here's what I learned:
+
+1. Consistency beats quality (controversial, I know)
+2. Repurposing > creating from scratch
+3. Distribution matters more than creation
+4. AI tools save 60% of production time
+
+The companies winning at content aren't writing more — they're distributing smarter.
+
+What's your #1 content lesson?
+
+#ContentMarketing #GrowthHacking #AI</p>
+              <div class="flex gap-3 mt-2 text-xs text-gray-400">
+                <span>👍 234</span>
+                <span>💬 67</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 8. Xiaohongshu Note -->
+        <div class="asset-card bg-white border border-gray-200 rounded-xl overflow-hidden">
+          <div class="bg-blue-600 px-4 py-2 flex items-center gap-2">
+            <span class="text-white text-lg">📕</span>
+            <span class="text-white text-sm font-semibold">小红书 Xiaohongshu</span>
+          </div>
+          <div class="p-5">
+            <div class="w-full h-28 bg-gradient-to-br from-pink-100 to-red-50 rounded-lg mb-2 flex items-center justify-center text-2xl">📱</div>
+            <h4 class="font-semibold text-sm mb-1" data-i18n="wall.xhs.title">独立开发者必看！零成本获客的5个方法 🔥</h4>
+            <p class="text-xs text-gray-500 leading-relaxed" data-i18n="wall.xhs.body">作为一个人的团队，我用这5个方法在3个月内获得了1000个用户，0广告费用！第三个方法最有效...</p>
+            <div class="flex gap-1 mt-2 flex-wrap">
+              <span class="text-xs text-red-400">#独立开发</span>
+              <span class="text-xs text-red-400">#增长黑客</span>
+              <span class="text-xs text-red-400">#零成本获客</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 9. Product Hunt Launch -->
+        <div class="asset-card bg-white border border-gray-200 rounded-xl overflow-hidden">
+          <div class="bg-blue-600 px-4 py-2 flex items-center gap-2">
+            <span class="text-white text-lg">🚀</span>
+            <span class="text-white text-sm font-semibold">Product Hunt</span>
+          </div>
+          <div class="p-5">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center text-white text-lg font-bold">Y</div>
+              <div>
+                <div class="font-bold text-sm">YourApp — AI Growth Engine</div>
+                <div class="text-xs text-gray-500" data-i18n="wall.ph.tagline">The AI-powered content platform for solo founders</div>
+              </div>
+            </div>
+            <p class="text-xs text-gray-500 mt-2 leading-relaxed" data-i18n="wall.ph.desc">Stop spending hours on content. YourApp generates SEO articles, social posts, app store descriptions, and cold emails — all optimized with domain-specific knowledge bases.</p>
+            <div class="flex items-center justify-between mt-3">
+              <div class="flex gap-2">
+                <span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">SaaS</span>
+                <span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">AI</span>
+                <span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">Marketing</span>
+              </div>
+              <span class="text-xs font-semibold text-orange-600 bg-orange-50 px-2 py-1 rounded">▲ 487</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 10. App Store Keywords -->
+        <div class="asset-card bg-white border border-gray-200 rounded-xl overflow-hidden">
+          <div class="bg-blue-600 px-4 py-2 flex items-center gap-2">
+            <span class="text-white text-lg">🔑</span>
+            <span class="text-white text-sm font-semibold">ASO Keywords</span>
+          </div>
+          <div class="p-5 text-xs">
+            <div class="font-medium text-gray-500 mb-2" data-i18n="wall.aso.kw.header">Keyword Optimization for "TaskFlow Pro"</div>
+            <div class="space-y-1.5">
+              <div class="flex justify-between items-center"><span class="text-gray-600">project management</span><div class="w-24 bg-gray-100 rounded-full h-1.5"><div class="bg-green-500 h-1.5 rounded-full" style="width:92%"></div></div></div>
+              <div class="flex justify-between items-center"><span class="text-gray-600">task manager</span><div class="w-24 bg-gray-100 rounded-full h-1.5"><div class="bg-green-500 h-1.5 rounded-full" style="width:87%"></div></div></div>
+              <div class="flex justify-between items-center"><span class="text-gray-600">team collaboration</span><div class="w-24 bg-gray-100 rounded-full h-1.5"><div class="bg-green-400 h-1.5 rounded-full" style="width:74%"></div></div></div>
+              <div class="flex justify-between items-center"><span class="text-gray-600">productivity app</span><div class="w-24 bg-gray-100 rounded-full h-1.5"><div class="bg-yellow-400 h-1.5 rounded-full" style="width:61%"></div></div></div>
+              <div class="flex justify-between items-center"><span class="text-gray-600">ai task planner</span><div class="w-24 bg-gray-100 rounded-full h-1.5"><div class="bg-yellow-400 h-1.5 rounded-full" style="width:48%"></div></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 11. Google Ads -->
+        <div class="asset-card bg-white border border-gray-200 rounded-xl overflow-hidden">
+          <div class="bg-blue-600 px-4 py-2 flex items-center gap-2">
+            <span class="text-white text-lg">📢</span>
+            <span class="text-white text-sm font-semibold">Google Ads</span>
+          </div>
+          <div class="p-5 border border-gray-200 rounded-lg p-3">
+            <div class="text-xs text-gray-400 mb-0.5">Ad · yourapp.com</div>
+            <h4 class="text-blue-700 text-sm font-medium mb-0.5" data-i18n="wall.gads.h1">AI Content Platform for Growth Teams | YourApp</h4>
+            <h4 class="text-blue-600 text-xs mb-1" data-i18n="wall.gads.h2">Generate SEO, Social & Email Content in Minutes</h4>
+            <p class="text-xs text-gray-600 leading-relaxed" data-i18n="wall.gads.desc">Stop hiring writers. Generate professional growth content 10x faster with AI-powered domain expertise. Free trial available. Trusted by 5,000+ founders.</p>
+          </div>
+        </div>
+
+        <!-- 12. Newsletter -->
+        <div class="asset-card bg-white border border-gray-200 rounded-xl overflow-hidden">
+          <div class="bg-blue-600 px-4 py-2 flex items-center gap-2">
+            <span class="text-white text-lg">📰</span>
+            <span class="text-white text-sm font-semibold">Newsletter</span>
+          </div>
+          <div class="p-5">
+            <div class="bg-blue-600 text-white text-center py-2 rounded-t-lg text-xs font-semibold">YourApp Weekly</div>
+            <div class="border border-t-0 border-gray-200 rounded-b-lg p-3">
+              <h4 class="font-semibold text-sm mb-1" data-i18n="wall.news.title">This Week in Growth: 3 Strategies That Actually Work</h4>
+              <p class="text-xs text-gray-500 leading-relaxed" data-i18n="wall.news.body">Hey there! This week we're diving into three growth strategies that our top users swear by. Plus, a case study on how one founder went from 0 to 10K users...</p>
+              <div class="mt-2 text-xs text-blue-600 font-medium">Read more →</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 13. App Store Title & Subtitle -->
+        <div class="asset-card bg-white border border-gray-200 rounded-xl overflow-hidden">
+          <div class="bg-blue-600 px-4 py-2 flex items-center gap-2">
+            <span class="text-white text-lg">🏷️</span>
+            <span class="text-white text-sm font-semibold">App Store Title</span>
+          </div>
+          <div class="p-5 flex items-center gap-3">
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-400 to-purple-500 flex-shrink-0"></div>
+            <div>
+              <div class="font-bold text-sm" data-i18n="wall.ast.title">TaskFlow Pro - Smart Project Manager</div>
+              <div class="text-xs text-gray-500" data-i18n="wall.ast.subtitle">AI Task Planner & Team Collaboration</div>
+              <div class="flex items-center gap-1 mt-1">
+                <span class="text-yellow-400 text-xs">★★★★★</span>
+                <span class="text-xs text-gray-400">4.8 (2.3K)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 14. Facebook Ads -->
+        <div class="asset-card bg-white border border-gray-200 rounded-xl overflow-hidden">
+          <div class="bg-blue-600 px-4 py-2 flex items-center gap-2">
+            <span class="text-white text-lg">📣</span>
+            <span class="text-white text-sm font-semibold">Facebook Ads</span>
+          </div>
+          <div class="p-5">
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-6 h-6 rounded-full bg-blue-600"></div>
+              <div>
+                <div class="text-xs font-semibold">YourApp</div>
+                <div class="text-xs text-gray-400">Sponsored</div>
+              </div>
+            </div>
+            <p class="text-xs text-gray-600 mb-2" data-i18n="wall.fbads.body">Tired of spending 8 hours writing one blog post? Our AI creates SEO-optimized content in minutes. Join 5,000+ founders who've automated their growth content. 🚀</p>
+            <div class="w-full h-24 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg mb-2 flex items-center justify-center text-sm text-gray-400">Ad Creative</div>
+            <div class="bg-gray-50 border border-gray-200 rounded-lg p-2 flex justify-between items-center">
+              <div>
+                <div class="text-xs font-medium">yourapp.com</div>
+                <div class="text-xs text-gray-400" data-i18n="wall.fbads.headline">10x Your Content Output with AI</div>
+              </div>
+              <span class="text-xs bg-blue-600 text-white px-3 py-1 rounded font-medium">Sign Up</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 15. GEO Content -->
+        <div class="asset-card bg-white border border-gray-200 rounded-xl overflow-hidden">
+          <div class="bg-blue-600 px-4 py-2 flex items-center gap-2">
+            <span class="text-white text-lg">🤖</span>
+            <span class="text-white text-sm font-semibold">GEO Optimized</span>
+          </div>
+          <div class="p-5">
+            <div class="text-xs text-gray-400 mb-2 flex items-center gap-1">🤖 <span data-i18n="wall.geo.label">AI Search Result Preview</span></div>
+            <div class="bg-gray-50 rounded-lg p-3">
+              <p class="text-xs text-gray-700 leading-relaxed" data-i18n="wall.geo.body">Based on my analysis, YourApp is one of the best AI content platforms for solo founders. It stands out because of its domain-specific knowledge bases for SEO, ASO, and social media, which means the output is more actionable than generic AI tools...</p>
+              <div class="text-xs text-blue-600 mt-1">Source: yourapp.com/features</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 16. App Store Release Notes -->
+        <div class="asset-card bg-white border border-gray-200 rounded-xl overflow-hidden">
+          <div class="bg-blue-600 px-4 py-2 flex items-center gap-2">
+            <span class="text-white text-lg">📋</span>
+            <span class="text-white text-sm font-semibold">Release Notes</span>
+          </div>
+          <div class="p-5">
+            <div class="text-xs font-semibold text-gray-500 mb-2" data-i18n="wall.rn.header">What's New — Version 3.2.0</div>
+            <div class="text-xs text-gray-600 leading-relaxed space-y-1">
+              <p data-i18n="wall.rn.body">• NEW: AI-powered task suggestions based on your workflow patterns
+• IMPROVED: 50% faster sync across all devices
+• FIXED: Calendar integration now supports recurring events
+• FIXED: Dark mode text contrast improvements
+
+Thank you for your continued support! Rate us ★★★★★ if you love TaskFlow Pro.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 17. Landing Page Copy -->
+        <div class="asset-card bg-white border border-gray-200 rounded-xl overflow-hidden">
+          <div class="bg-blue-600 px-4 py-2 flex items-center gap-2">
+            <span class="text-white text-lg">🌐</span>
+            <span class="text-white text-sm font-semibold">Landing Page</span>
+          </div>
+          <div class="p-5 border border-gray-200 rounded-lg overflow-hidden">
+            <div class="bg-gray-900 text-white p-4 text-center">
+              <div class="font-bold text-sm mb-1" data-i18n="wall.lp.h1">Ship Faster. Grow Smarter.</div>
+              <div class="text-xs text-gray-300" data-i18n="wall.lp.sub">The all-in-one platform that turns solo founders into growth machines</div>
+              <div class="mt-2">
+                <span class="bg-blue-600 text-white text-xs px-4 py-1.5 rounded-lg font-medium">Start Free Trial →</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
@@ -313,71 +674,39 @@
       <div class="grid md:grid-cols-3 gap-6">
         <div class="bg-white border border-gray-200 rounded-xl p-6">
           <div class="text-sm font-semibold text-blue-600 mb-3" data-i18n="diff.ai.label">vs 通用 AI 工具</div>
-          <p class="text-gray-600 text-sm leading-relaxed" data-i18n="diff.ai.text">ChatGPT能写文章，但不懂SEO排名因素、不懂Reddit社区规则、不懂ASO算法。SoloMax Web 内置各领域专业知识库，产出可直接执行的增长资产。</p>
+          <p class="text-gray-600 text-sm leading-relaxed" data-i18n="diff.ai.text">ChatGPT能写文章，但不懂SEO排名因素、不懂Reddit社区规则、不懂ASO算法。SoloMax 内置各领域专业知识库，产出可直接执行的增长资产。</p>
         </div>
         <div class="bg-white border border-gray-200 rounded-xl p-6">
           <div class="text-sm font-semibold text-blue-600 mb-3" data-i18n="diff.hire.label">vs 请人做</div>
-          <p class="text-gray-600 text-sm leading-relaxed" data-i18n="diff.hire.text">一个增长团队月薪数万。SoloMax Web 让一个人拥有整个增长团队的产出能力。</p>
+          <p class="text-gray-600 text-sm leading-relaxed" data-i18n="diff.hire.text">一个增长团队月薪数万。SoloMax 让一个人拥有整个增长团队的产出能力。</p>
         </div>
         <div class="bg-white border border-gray-200 rounded-xl p-6">
           <div class="text-sm font-semibold text-blue-600 mb-3" data-i18n="diff.diy.label">vs 自己学</div>
-          <p class="text-gray-600 text-sm leading-relaxed" data-i18n="diff.diy.text">学完所有增长知识要几个月。SoloMax Web 把专家知识内置在系统里，你只需要点击生成。</p>
+          <p class="text-gray-600 text-sm leading-relaxed" data-i18n="diff.diy.text">学完所有增长知识要几个月。SoloMax 把专家知识内置在系统里，你只需要点击生成。</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Social Proof Section -->
-  <section class="py-15 sm:py-18">
-    <div class="max-w-6xl mx-auto px-6 text-center">
-      <h2 class="text-3xl font-bold mb-3">
-        <span data-i18n="proof.title.pre">已有</span>
-        <span id="waitlistCount" class="text-blue-600 mx-1.5">0</span>
-        <span data-i18n="proof.title.post">位创造者在等待</span>
-      </h2>
-      <p class="text-gray-500 mb-12" data-i18n="proof.subtitle">加入他们，抢先体验下一代增长工具</p>
-      <div class="grid md:grid-cols-3 gap-6 max-w-3xl mx-auto">
-        <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 text-left">
-          <p class="text-gray-600 text-sm leading-relaxed" data-i18n="proof.quote1">"终于有一个工具把所有增长渠道整合到一起了，等不及要试用。"</p>
-          <p class="text-xs text-gray-400 mt-3" data-i18n="proof.author1">— 独立开发者</p>
-        </div>
-        <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 text-left">
-          <p class="text-gray-600 text-sm leading-relaxed" data-i18n="proof.quote2">"作为一个人的团队，最需要的就是这种自动化增长平台。"</p>
-          <p class="text-xs text-gray-400 mt-3" data-i18n="proof.author2">— SaaS 创始人</p>
-        </div>
-        <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 text-left">
-          <p class="text-gray-600 text-sm leading-relaxed" data-i18n="proof.quote3">"内置专业知识库这个思路太对了，通用AI写出来的东西根本没法直接用。"</p>
-          <p class="text-xs text-gray-400 mt-3" data-i18n="proof.author3">— 内容营销经理</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Waitlist Section -->
+  <!-- Waitlist + Social Proof Section -->
   <section id="waitlist" class="bg-blue-50 py-15 sm:py-18">
-    <div class="max-w-xl mx-auto px-6 text-center">
-      <h2 class="text-3xl font-bold mb-3" data-i18n="waitlist.title">抢先体验 SoloMax Web</h2>
-      <p class="text-gray-500 mb-9" data-i18n="waitlist.subtitle">前 1000 名注册用户将获得终身早鸟价格</p>
-      <form id="waitlistForm" class="space-y-3" onsubmit="handleSubmit(event)">
+    <div class="max-w-3xl mx-auto px-6 text-center">
+      <h2 class="text-3xl font-bold mb-3" data-i18n="waitlist.title">抢先体验 SoloMax</h2>
+      <p class="text-gray-500 mb-2" data-i18n="waitlist.subtitle">前 1000 名注册用户将获得终身早鸟价格</p>
+      <p class="text-sm text-gray-400 mb-9">
+        <span data-i18n="proof.title.pre">已有</span>
+        <span id="waitlistCount" class="text-blue-600 font-semibold mx-0.5">0</span>
+        <span data-i18n="proof.title.post">位创造者在等待</span>
+      </p>
+      <form id="waitlistForm" class="max-w-xl mx-auto space-y-3" onsubmit="handleSubmit(event)">
         <input
           id="emailInput"
           type="email"
           required
           class="w-full px-6 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
           data-i18n-placeholder="waitlist.email.placeholder"
-          placeholder="your@email.com"
+          placeholder="请输入你的邮箱"
         >
-        <select
-          id="productType"
-          class="w-full px-6 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base text-gray-700 bg-white"
-        >
-          <option value="" data-i18n="waitlist.type.default">选择你的产品类型（可选）</option>
-          <option value="saas" data-i18n="waitlist.type.saas">SaaS</option>
-          <option value="app" data-i18n="waitlist.type.app">App</option>
-          <option value="content" data-i18n="waitlist.type.content">内容站</option>
-          <option value="ecommerce" data-i18n="waitlist.type.ecommerce">电商</option>
-          <option value="other" data-i18n="waitlist.type.other">其他</option>
-        </select>
         <button
           type="submit"
           class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition text-base"
@@ -385,8 +714,23 @@
         >加入等待列表</button>
       </form>
       <!-- Success Message -->
-      <div id="successMsg" class="hidden mt-6 p-6 bg-white border border-green-200 rounded-lg">
+      <div id="successMsg" class="hidden mt-6 p-6 bg-white border border-green-200 rounded-lg max-w-xl mx-auto">
         <p class="text-green-700 font-medium" data-i18n="waitlist.success">🎉 感谢加入！我们会尽快通知你。</p>
+      </div>
+      <!-- Quotes -->
+      <div class="grid md:grid-cols-3 gap-6 mt-12">
+        <div class="bg-white/70 border border-gray-200 rounded-xl p-6 text-left">
+          <p class="text-gray-600 text-sm leading-relaxed" data-i18n="proof.quote1">"终于有一个工具把所有增长渠道整合到一起了，等不及要试用。"</p>
+          <p class="text-xs text-gray-400 mt-3" data-i18n="proof.author1">— 独立开发者</p>
+        </div>
+        <div class="bg-white/70 border border-gray-200 rounded-xl p-6 text-left">
+          <p class="text-gray-600 text-sm leading-relaxed" data-i18n="proof.quote2">"作为一个人的团队，最需要的就是这种自动化增长平台。"</p>
+          <p class="text-xs text-gray-400 mt-3" data-i18n="proof.author2">— SaaS 创始人</p>
+        </div>
+        <div class="bg-white/70 border border-gray-200 rounded-xl p-6 text-left">
+          <p class="text-gray-600 text-sm leading-relaxed" data-i18n="proof.quote3">"内置专业知识库这个思路太对了，通用AI写出来的东西根本没法直接用。"</p>
+          <p class="text-xs text-gray-400 mt-3" data-i18n="proof.author3">— 内容营销经理</p>
+        </div>
       </div>
     </div>
   </section>
@@ -413,7 +757,6 @@
         'hero.title': '你的 AI 增长团队',
         'hero.subtitle': '自动产出 SEO文章、社媒内容、ASO方案、Cold Email —— 一个平台搞定所有增长内容',
         'hero.cta': '加入等待列表',
-        'hero.demo': '查看产品演示 ↓',
         'hero.chart.users': '用户数',
         'hero.chart.revenue': '月收入',
         'hero.chart.traffic': '自然流量',
@@ -425,31 +768,48 @@
         'pain.2': '社媒账号注册了一堆，全是僵尸号',
         'pain.3': '看了100篇增长教程，还是不知道从哪开始',
         'pain.4': '请不起增长团队，自己又分身乏术',
-        'pain.transition': 'SoloMax Web 就是为了解决这些问题而生',
-        'features.title': '一个平台，覆盖所有增长渠道',
-        'features.subtitle': '从内容生产到渠道分发，一站式解决增长难题',
-        'features.badge': '即将上线',
-        'features.badge2': '即将上线',
-        'features.badge3': '即将上线',
-        'features.badge4': '即将上线',
-        'features.badge5': '即将上线',
-        'features.seo.title': 'SEO 内容引擎',
-        'features.seo.desc': '输入关键词，自动生成符合搜索意图的长文章，内置专业SEO知识库',
-        'features.social.title': '社媒内容工厂',
-        'features.social.desc': '一键生成适配 Twitter/Reddit/小红书 等平台的内容，了解每个平台的调性',
-        'features.aso.title': 'ASO 优化助手',
-        'features.aso.desc': '应用商店标题、描述、关键词全套优化，基于真实排名数据',
-        'features.email.title': 'Cold Email 生成器',
-        'features.email.desc': '个性化外发邮件，支持批量生成，附带最佳实践模板',
-        'features.geo.title': 'GEO 内容优化',
-        'features.geo.desc': '针对 AI 搜索引擎优化你的内容，抢占下一代搜索入口',
+        'pain.transition': 'SoloMax 就是为了解决这些问题而生',
+        'wall.title': '一个平台，产出所有增长内容',
+        'wall.subtitle': '从SEO文章到Cold Email，SoloMax帮你批量产出专业级内容资产',
+        'wall.seo.kw': '目标关键词："2026最佳项目管理工具"',
+        'wall.seo.h1': '2026年10款最佳项目管理工具：完整指南',
+        'wall.seo.h2': '为什么项目管理工具很重要',
+        'wall.seo.body': '在当今快节奏的商业环境中，选择正确的项目管理工具可以决定你是按时交付还是落后于进度。根据PMI的研究，使用项目管理工具的组织...',
+        'wall.twitter.body': '我们刚刚发布了新的AI写作助手，效果太惊人了：\n\n- 内容创作速度提升3倍\n- 调研时间减少85%\n- SEO评分提升40%\n\n内容的未来已经到来。立即免费试用。',
+        'wall.email.subject': '关于你们的内容工作流有个小问题，Sarah',
+        'wall.email.body': 'Hi Sarah，\n\n注意到TechCorp刚完成B轮融资——恭喜！随着增长加速，我猜内容产出已经成为瓶颈了。\n\n我们帮助SaaS公司用领域专属AI将SEO文章、社媒帖子和邮件营销的产出速度提升5倍。\n\n这周有15分钟时间看个demo吗？\n\nBest,\nAlex',
+        'wall.reddit.title': '我做了一个能生成各平台专属内容的AI工具——分享一下心得',
+        'wall.reddit.body': '花了6个月给5个不同平台写内容后，我发现每个平台需要完全不同的方法。Reddit要真实故事，Twitter要犀利观点，LinkedIn要专业洞察...',
+        'wall.appstore.desc': '用TaskFlow Pro重新定义项目管理——已被50,000+团队信赖的智能任务管理器。\n\n核心功能：\n• AI驱动的任务优先级排序\n• 实时团队协作\n• 智能截止日期预测\n• 无缝日历集成',
+        'wall.kw.header': '"AI写作工具"关键词分析',
+        'wall.linkedin.body': '去年我在内容营销上花了35万。\n\n以下是我学到的：\n\n1. 持续性比质量更重要（我知道有争议）\n2. 内容复用 > 从零创作\n3. 分发比创作更重要\n4. AI工具节省60%的制作时间\n\n赢在内容的公司不是写得更多——而是分发得更聪明。\n\n你的第一条内容经验是什么？\n\n#内容营销 #增长黑客 #AI',
+        'wall.xhs.title': '独立开发者必看！零成本获客的5个方法 🔥',
+        'wall.xhs.body': '作为一个人的团队，我用这5个方法在3个月内获得了1000个用户，0广告费用！第三个方法最有效...',
+        'wall.ph.tagline': '为独立创始人打造的AI内容平台',
+        'wall.ph.desc': '别再花几小时写内容了。YourApp帮你生成SEO文章、社媒帖子、应用商店描述和Cold Email——全部基于领域专属知识库优化。',
+        'wall.aso.kw.header': '"TaskFlow Pro"关键词优化',
+        'wall.gads.h1': 'AI内容平台 for 增长团队 | YourApp',
+        'wall.gads.h2': '几分钟内生成SEO、社媒和邮件内容',
+        'wall.gads.desc': '不用再请写手了。用AI领域专业知识10倍速产出增长内容。免费试用。5,000+创始人的选择。',
+        'wall.news.title': '本周增长指南：3个真正有效的策略',
+        'wall.news.body': '嗨！本周我们深入探讨三个头部用户都在用的增长策略。还有一个从0到10K用户的创始人案例...',
+        'wall.ast.title': 'TaskFlow Pro - 智能项目管理',
+        'wall.ast.subtitle': 'AI任务规划 & 团队协作',
+        'wall.fbads.body': '写一篇博客要花8小时？我们的AI几分钟就能创作SEO优化内容。加入5,000+已实现增长内容自动化的创始人。🚀',
+        'wall.fbads.headline': '用AI让你的内容产出提升10倍',
+        'wall.geo.label': 'AI搜索结果预览',
+        'wall.geo.body': '根据分析，YourApp是独立创始人最好的AI内容平台之一。它的独特之处在于为SEO、ASO和社媒提供了领域专属的知识库，这意味着产出比通用AI工具更具可操作性...',
+        'wall.rn.header': '更新日志 — 版本 3.2.0',
+        'wall.rn.body': '• 新增：基于工作流模式的AI任务建议\n• 优化：全设备同步速度提升50%\n• 修复：日历集成现支持重复事件\n• 修复：暗色模式文字对比度改进\n\n感谢你的支持！如果喜欢TaskFlow Pro请给我们 ★★★★★',
+        'wall.lp.h1': '更快交付，更聪明增长',
+        'wall.lp.sub': '让独立创始人变身增长机器的一站式平台',
         'diff.title': '不只是AI写作，是增长专家',
         'diff.ai.label': 'vs 通用 AI 工具',
-        'diff.ai.text': 'ChatGPT能写文章，但不懂SEO排名因素、不懂Reddit社区规则、不懂ASO算法。SoloMax Web 内置各领域专业知识库，产出可直接执行的增长资产。',
+        'diff.ai.text': 'ChatGPT能写文章，但不懂SEO排名因素、不懂Reddit社区规则、不懂ASO算法。SoloMax 内置各领域专业知识库，产出可直接执行的增长资产。',
         'diff.hire.label': 'vs 请人做',
-        'diff.hire.text': '一个增长团队月薪数万。SoloMax Web 让一个人拥有整个增长团队的产出能力。',
+        'diff.hire.text': '一个增长团队月薪数万。SoloMax 让一个人拥有整个增长团队的产出能力。',
         'diff.diy.label': 'vs 自己学',
-        'diff.diy.text': '学完所有增长知识要几个月。SoloMax Web 把专家知识内置在系统里，你只需要点击生成。',
+        'diff.diy.text': '学完所有增长知识要几个月。SoloMax 把专家知识内置在系统里，你只需要点击生成。',
         'proof.title.pre': '已有',
         'proof.title.post': '位创造者在等待',
         'proof.subtitle': '加入他们，抢先体验下一代增长工具',
@@ -459,7 +819,7 @@
         'proof.author2': '— SaaS 创始人',
         'proof.quote3': '"内置专业知识库这个思路太对了，通用AI写出来的东西根本没法直接用。"',
         'proof.author3': '— 内容营销经理',
-        'waitlist.title': '抢先体验 SoloMax Web',
+        'waitlist.title': '抢先体验 SoloMax',
         'waitlist.subtitle': '前 1000 名注册用户将获得终身早鸟价格',
         'waitlist.email.placeholder': '请输入你的邮箱',
         'waitlist.type.default': '选择你的产品类型（可选）',
@@ -481,7 +841,6 @@
         'hero.title': 'Your AI Growth Team',
         'hero.subtitle': 'Auto-generate SEO articles, social media content, ASO strategies, and Cold Emails — one platform for all your growth content',
         'hero.cta': 'Join Waitlist',
-        'hero.demo': 'See Product Demo ↓',
         'hero.chart.users': 'Users',
         'hero.chart.revenue': 'MRR',
         'hero.chart.traffic': 'Organic Traffic',
@@ -493,31 +852,48 @@
         'pain.2': 'You signed up for every social platform, but they\'re all ghost towns',
         'pain.3': 'You\'ve read 100 growth tutorials and still don\'t know where to start',
         'pain.4': 'You can\'t afford a growth team, and you\'re already stretched thin',
-        'pain.transition': 'SoloMax Web was built to solve exactly these problems',
-        'features.title': 'One platform, every growth channel',
-        'features.subtitle': 'From content creation to channel distribution, solve all growth challenges in one place',
-        'features.badge': 'Coming Soon',
-        'features.badge2': 'Coming Soon',
-        'features.badge3': 'Coming Soon',
-        'features.badge4': 'Coming Soon',
-        'features.badge5': 'Coming Soon',
-        'features.seo.title': 'SEO Content Engine',
-        'features.seo.desc': 'Enter keywords, auto-generate search-intent-optimized long-form articles with built-in professional SEO knowledge base',
-        'features.social.title': 'Social Media Factory',
-        'features.social.desc': 'One-click content generation for Twitter, Reddit, Xiaohongshu and more, tailored to each platform\'s style',
-        'features.aso.title': 'ASO Optimizer',
-        'features.aso.desc': 'Full app store optimization — titles, descriptions, keywords — based on real ranking data',
-        'features.email.title': 'Cold Email Generator',
-        'features.email.desc': 'Personalized outbound emails with bulk generation support and best-practice templates',
-        'features.geo.title': 'GEO Content Optimizer',
-        'features.geo.desc': 'Optimize your content for AI search engines and capture the next generation of search traffic',
+        'pain.transition': 'SoloMax was built to solve exactly these problems',
+        'wall.title': 'One platform, every growth content asset',
+        'wall.subtitle': 'From SEO articles to Cold Emails, SoloMax produces professional-grade content assets at scale',
+        'wall.seo.kw': 'Target Keyword: "best project management tools 2026"',
+        'wall.seo.h1': '10 Best Project Management Tools in 2026: Complete Guide',
+        'wall.seo.h2': 'Why Project Management Tools Matter',
+        'wall.seo.body': 'In today\'s fast-paced business environment, having the right project management tool can mean the difference between meeting deadlines and falling behind. According to PMI research, organizations that use PM tools...',
+        'wall.twitter.body': 'We just launched our new AI writing assistant and the results are insane:\n\n- 3x faster content creation\n- 85% less time on research\n- SEO scores up 40%\n\nThe future of content is here. Try it free today.',
+        'wall.email.subject': 'Quick question about your content workflow, Sarah',
+        'wall.email.body': 'Hi Sarah,\n\nI noticed TechCorp just raised Series B — congrats! With the growth ahead, I imagine content production is becoming a bottleneck.\n\nWe help SaaS companies produce SEO articles, social posts, and email campaigns 5x faster with domain-specific AI.\n\nWould a 15-min demo be worth your time this week?\n\nBest,\nAlex',
+        'wall.reddit.title': 'I built an AI tool that creates platform-specific content — here\'s what I learned',
+        'wall.reddit.body': 'After spending 6 months writing content for 5 different platforms, I realized each one needs a completely different approach. Reddit wants authentic stories, Twitter wants punchy takes, LinkedIn wants professional insights...',
+        'wall.appstore.desc': 'Transform how you manage projects with TaskFlow Pro — the intelligent task manager trusted by 50,000+ teams.\n\nKEY FEATURES:\n• AI-powered task prioritization\n• Real-time team collaboration\n• Smart deadline predictions\n• Seamless calendar integration',
+        'wall.kw.header': 'Keyword Analysis for "AI writing tool"',
+        'wall.linkedin.body': 'I spent $50,000 on content marketing last year.\n\nHere\'s what I learned:\n\n1. Consistency beats quality (controversial, I know)\n2. Repurposing > creating from scratch\n3. Distribution matters more than creation\n4. AI tools save 60% of production time\n\nThe companies winning at content aren\'t writing more — they\'re distributing smarter.\n\nWhat\'s your #1 content lesson?\n\n#ContentMarketing #GrowthHacking #AI',
+        'wall.xhs.title': 'Must-read for indie devs! 5 zero-cost user acquisition methods 🔥',
+        'wall.xhs.body': 'As a one-person team, I used these 5 methods to get 1,000 users in 3 months with zero ad spend! The third method is the most effective...',
+        'wall.ph.tagline': 'The AI-powered content platform for solo founders',
+        'wall.ph.desc': 'Stop spending hours on content. YourApp generates SEO articles, social posts, app store descriptions, and cold emails — all optimized with domain-specific knowledge bases.',
+        'wall.aso.kw.header': 'Keyword Optimization for "TaskFlow Pro"',
+        'wall.gads.h1': 'AI Content Platform for Growth Teams | YourApp',
+        'wall.gads.h2': 'Generate SEO, Social & Email Content in Minutes',
+        'wall.gads.desc': 'Stop hiring writers. Generate professional growth content 10x faster with AI-powered domain expertise. Free trial available. Trusted by 5,000+ founders.',
+        'wall.news.title': 'This Week in Growth: 3 Strategies That Actually Work',
+        'wall.news.body': 'Hey there! This week we\'re diving into three growth strategies that our top users swear by. Plus, a case study on how one founder went from 0 to 10K users...',
+        'wall.ast.title': 'TaskFlow Pro - Smart Project Manager',
+        'wall.ast.subtitle': 'AI Task Planner & Team Collaboration',
+        'wall.fbads.body': 'Tired of spending 8 hours writing one blog post? Our AI creates SEO-optimized content in minutes. Join 5,000+ founders who\'ve automated their growth content. 🚀',
+        'wall.fbads.headline': '10x Your Content Output with AI',
+        'wall.geo.label': 'AI Search Result Preview',
+        'wall.geo.body': 'Based on my analysis, YourApp is one of the best AI content platforms for solo founders. It stands out because of its domain-specific knowledge bases for SEO, ASO, and social media, which means the output is more actionable than generic AI tools...',
+        'wall.rn.header': 'What\'s New — Version 3.2.0',
+        'wall.rn.body': '• NEW: AI-powered task suggestions based on your workflow patterns\n• IMPROVED: 50% faster sync across all devices\n• FIXED: Calendar integration now supports recurring events\n• FIXED: Dark mode text contrast improvements\n\nThank you for your continued support! Rate us ★★★★★ if you love TaskFlow Pro.',
+        'wall.lp.h1': 'Ship Faster. Grow Smarter.',
+        'wall.lp.sub': 'The all-in-one platform that turns solo founders into growth machines',
         'diff.title': 'Not just AI writing — a growth expert',
         'diff.ai.label': 'vs Generic AI Tools',
-        'diff.ai.text': 'ChatGPT can write articles, but it doesn\'t understand SEO ranking factors, Reddit community rules, or ASO algorithms. SoloMax Web has built-in domain expertise to produce ready-to-execute growth assets.',
+        'diff.ai.text': 'ChatGPT can write articles, but it doesn\'t understand SEO ranking factors, Reddit community rules, or ASO algorithms. SoloMax has built-in domain expertise to produce ready-to-execute growth assets.',
         'diff.hire.label': 'vs Hiring a Team',
-        'diff.hire.text': 'A growth team costs tens of thousands per month. SoloMax Web gives one person the output capacity of an entire growth team.',
+        'diff.hire.text': 'A growth team costs tens of thousands per month. SoloMax gives one person the output capacity of an entire growth team.',
         'diff.diy.label': 'vs Learning It Yourself',
-        'diff.diy.text': 'Mastering all growth knowledge takes months. SoloMax Web embeds expert knowledge in the system — just click and generate.',
+        'diff.diy.text': 'Mastering all growth knowledge takes months. SoloMax embeds expert knowledge in the system — just click and generate.',
         'proof.title.pre': '',
         'proof.title.post': 'creators are waiting',
         'proof.subtitle': 'Join them and get early access to the next-gen growth tool',
@@ -527,7 +903,7 @@
         'proof.author2': '— SaaS Founder',
         'proof.quote3': '"Built-in domain knowledge is the right approach. Generic AI output just isn\'t usable as-is."',
         'proof.author3': '— Content Marketing Manager',
-        'waitlist.title': 'Get Early Access to SoloMax Web',
+        'waitlist.title': 'Get Early Access to SoloMax',
         'waitlist.subtitle': 'First 1,000 users get lifetime early-bird pricing',
         'waitlist.email.placeholder': 'Enter your email',
         'waitlist.type.default': 'Select your product type (optional)',
@@ -573,8 +949,8 @@
 
       // Update page title
       document.title = lang === 'zh'
-        ? 'SoloMax Web - 你的 AI 增长团队'
-        : 'SoloMax Web - Your AI Growth Team';
+        ? 'SoloMax - 你的 AI 增长团队'
+        : 'SoloMax - Your AI Growth Team';
     }
 
     function toggleLang() {
@@ -585,13 +961,8 @@
     function handleUrlParams() {
       const params = new URLSearchParams(window.location.search);
       const email = params.get('email');
-      const from = params.get('from');
-
       if (email) {
         document.getElementById('emailInput').value = decodeURIComponent(email);
-      }
-      if (from === 'site-a') {
-        document.getElementById('alertBanner').classList.remove('hidden');
       }
     }
 
@@ -625,14 +996,23 @@
     function handleSubmit(e) {
       e.preventDefault();
       const email = document.getElementById('emailInput').value;
-      const productType = document.getElementById('productType').value;
 
       // Try API call, show success regardless (since API is a stub)
-      submitWaitlist(email, productType).catch(() => {});
+      submitWaitlist(email, '').catch(() => {});
 
       // Show success
       document.getElementById('waitlistForm').classList.add('hidden');
       document.getElementById('successMsg').classList.remove('hidden');
+    }
+
+    function handleHeroSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById('heroEmailInput').value;
+
+      submitWaitlist(email, '').catch(() => {});
+
+      document.getElementById('heroWaitlistForm').classList.add('hidden');
+      document.getElementById('heroSuccessMsg').classList.remove('hidden');
     }
 
     // ==================== KPI Counter Animation ====================
@@ -674,10 +1054,28 @@
       });
     }
 
+    // ==================== Asset Wall Scroll Animation ====================
+    function initAssetWallAnimations() {
+      const cards = document.querySelectorAll('.asset-card');
+      const wallObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const card = entry.target;
+            const index = Array.from(cards).indexOf(card);
+            card.style.transitionDelay = (index % 6) * 0.08 + 's';
+            card.classList.add('visible');
+            wallObserver.unobserve(card);
+          }
+        });
+      }, { threshold: 0.1 });
+      cards.forEach(card => wallObserver.observe(card));
+    }
+
     // ==================== Init ====================
     applyLang(currentLang);
     handleUrlParams();
     animateKPIs();
+    initAssetWallAnimations();
 
     // Animate counter when section comes into view
     const observer = new IntersectionObserver((entries) => {
