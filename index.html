@@ -966,10 +966,27 @@ Thank you for your continued support! Rate us ★★★★★ if you love TaskFl
       }
     }
 
+    // ==================== API ====================
+    const API_BASE = 'https://growthnow.000ooo.ooo';
+
+    async function fetchWaitlistCount() {
+      const res = await fetch(`${API_BASE}/api/waitlist/count`);
+      const { count } = await res.json();
+      return count;
+    }
+
+    async function submitWaitlist(email, source = 'hero') {
+      const res = await fetch(`${API_BASE}/api/waitlist`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, source }),
+      });
+      return res.json();
+    }
+
     // ==================== Waitlist Counter ====================
-    function animateCounter() {
+    function animateCounterTo(target) {
       const el = document.getElementById('waitlistCount');
-      const target = 200 + Math.floor(Math.random() * 80);
       let current = 0;
       const step = Math.ceil(target / 40);
       const timer = setInterval(() => {
@@ -982,37 +999,60 @@ Thank you for your continued support! Rate us ★★★★★ if you love TaskFl
       }, 30);
     }
 
-    // ==================== Waitlist Submit ====================
-    async function submitWaitlist(email, productType) {
-      // TODO: Replace with real API endpoint
-      const response = await fetch('/api/waitlist', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, productType }),
-      });
-      return response.json();
+    async function loadWaitlistCount() {
+      try {
+        const count = await fetchWaitlistCount();
+        animateCounterTo(count);
+      } catch {
+        animateCounterTo(200);
+      }
     }
 
-    function handleSubmit(e) {
+    // ==================== Waitlist Submit ====================
+    async function handleSubmit(e) {
       e.preventDefault();
       const email = document.getElementById('emailInput').value;
+      const btn = e.target.querySelector('button[type="submit"]');
+      btn.disabled = true;
+      btn.textContent = '...';
 
-      // Try API call, show success regardless (since API is a stub)
-      submitWaitlist(email, '').catch(() => {});
-
-      // Show success
-      document.getElementById('waitlistForm').classList.add('hidden');
-      document.getElementById('successMsg').classList.remove('hidden');
+      try {
+        const data = await submitWaitlist(email, 'bottom');
+        document.getElementById('waitlistForm').classList.add('hidden');
+        const msg = document.getElementById('successMsg');
+        msg.classList.remove('hidden');
+        if (data.position) {
+          msg.querySelector('p').textContent = currentLang === 'zh'
+            ? `🎉 你是第 ${data.position} 位！前 1000 名享受早鸟价`
+            : `🎉 You're #${data.position}! First 1,000 get early-bird pricing`;
+        }
+      } catch {
+        document.getElementById('waitlistForm').classList.add('hidden');
+        document.getElementById('successMsg').classList.remove('hidden');
+      }
     }
 
-    function handleHeroSubmit(e) {
+    async function handleHeroSubmit(e) {
       e.preventDefault();
       const email = document.getElementById('heroEmailInput').value;
+      const btn = e.target.querySelector('button[type="submit"]');
+      btn.disabled = true;
+      btn.textContent = '...';
 
-      submitWaitlist(email, '').catch(() => {});
-
-      document.getElementById('heroWaitlistForm').classList.add('hidden');
-      document.getElementById('heroSuccessMsg').classList.remove('hidden');
+      try {
+        const data = await submitWaitlist(email, 'hero');
+        document.getElementById('heroWaitlistForm').classList.add('hidden');
+        const msg = document.getElementById('heroSuccessMsg');
+        msg.classList.remove('hidden');
+        if (data.position) {
+          msg.querySelector('p').textContent = currentLang === 'zh'
+            ? `🎉 你是第 ${data.position} 位！前 1000 名享受早鸟价`
+            : `🎉 You're #${data.position}! First 1,000 get early-bird pricing`;
+        }
+      } catch {
+        document.getElementById('heroWaitlistForm').classList.add('hidden');
+        document.getElementById('heroSuccessMsg').classList.remove('hidden');
+      }
     }
 
     // ==================== KPI Counter Animation ====================
@@ -1077,11 +1117,11 @@ Thank you for your continued support! Rate us ★★★★★ if you love TaskFl
     animateKPIs();
     initAssetWallAnimations();
 
-    // Animate counter when section comes into view
+    // Fetch real count and animate when section comes into view
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          animateCounter();
+          loadWaitlistCount();
           observer.disconnect();
         }
       });
